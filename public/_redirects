@@ -1,0 +1,26 @@
+# Per-app connect guides were removed from the docs; claw-link.dev/hub/<app>
+# is the canonical page for each app. Apps with no hub page go to their
+# docs category page instead.
+/integrations/openclaw-to-airtable  https://claw-link.dev/hub/airtable  301
+/integrations/openclaw-to-apollo  /integrations/crm-sales  301
+/integrations/openclaw-to-discord  https://claw-link.dev/hub/discord  301
+/integrations/openclaw-to-facebook  /integrations/social-media  301
+/integrations/openclaw-to-github  https://claw-link.dev/hub/github  301
+/integrations/openclaw-to-gmail  https://claw-link.dev/hub/gmail  301
+/integrations/openclaw-to-google-calendar  https://claw-link.dev/hub/google-calendar  301
+/integrations/openclaw-to-google-drive  https://claw-link.dev/hub/google-drive  301
+/integrations/openclaw-to-google-sheets  https://claw-link.dev/hub/google-sheets  301
+/integrations/openclaw-to-hubspot  https://claw-link.dev/hub/hubspot  301
+/integrations/openclaw-to-instagram  https://claw-link.dev/hub/instagram  301
+/integrations/openclaw-to-linear  https://claw-link.dev/hub/linear  301
+/integrations/openclaw-to-linkedin  https://claw-link.dev/hub/linkedin  301
+/integrations/openclaw-to-notion  https://claw-link.dev/hub/notion  301
+/integrations/openclaw-to-pipedrive  /integrations/crm-sales  301
+/integrations/openclaw-to-salesforce  https://claw-link.dev/hub/salesforce  301
+/integrations/openclaw-to-shopify  /integrations/payments  301
+/integrations/openclaw-to-slack  https://claw-link.dev/hub/slack  301
+/integrations/openclaw-to-stripe  /integrations/payments  301
+/integrations/openclaw-to-telegram  https://claw-link.dev/hub/telegram  301
+/integrations/openclaw-to-todoist  /integrations/productivity  301
+/integrations/openclaw-to-twitter-x  /integrations/social-media  301
+/integrations/openclaw-to-youtube  https://claw-link.dev/hub/youtube  301
