@@ -1,5 +1,9 @@
 name: Build
 
+# Cloudflare Pages builds and deploys the site from its own Git integration.
+# This workflow is just the pull-request check: it fails on type errors,
+# broken MDX, and anything else that would break the Cloudflare build.
+
 on:
   pull_request:
   push:
@@ -16,21 +20,3 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main'
-        with:
-          path: out
-
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
