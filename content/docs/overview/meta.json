@@ -1,0 +1,25 @@
+{
+  "title": "Overview",
+  "description": "Install ClawLink, connect apps, and run actions from your agent",
+  "icon": "Rocket",
+  "root": true,
+  "pages": [
+    "---Get Started---",
+    "index",
+    "introduction",
+    "quickstart",
+    "openclaw",
+    "hermes",
+    "how-it-works",
+    "---Dashboard---",
+    "dashboard",
+    "billing",
+    "---Guides---",
+    "build-an-openclaw-sales-assistant-with-gmail-and-hubspot",
+    "---Help---",
+    "troubleshooting",
+    "faq",
+    "security",
+    "pricing"
+  ]
+}

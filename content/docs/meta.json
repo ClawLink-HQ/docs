@@ -1,0 +1,5 @@
+{
+  "title": "ClawLink",
+  "description": "Hosted integrations for OpenClaw, Hermes, and other agent workflows.",
+  "pages": ["overview", "integrations", "api"]
+}

@@ -1,0 +1,68 @@
+---
+title: "ClawLink Documentation"
+description: "Install ClawLink in OpenClaw or Hermes, pair your device, and connect apps through hosted flows."
+icon: "House"
+---
+
+ClawLink is the hosted integration layer for OpenClaw, Hermes, and similar agent workflows. Install it once, approve the device in your browser, and connect the apps you want from the dashboard. ClawLink handles hosted auth, credential storage, retries, and request logging for you.
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Get connected in a few minutes with install, browser pairing, and your first hosted app connection.
+  </Card>
+  <Card title="OpenClaw setup" icon="terminal" href="/openclaw">
+    Install the plugin, pair this device, and understand the supported OpenClaw paths.
+  </Card>
+  <Card title="Hermes setup" icon="sparkles" href="/hermes">
+    Use the dashboard install flow, approve the device, and connect apps for Hermes.
+  </Card>
+  <Card title="How It Works" icon="diagram-project" href="/how-it-works">
+    Understand the hosted app, execution worker, shared storage, and request lifecycle.
+  </Card>
+  <Card title="Integrations" icon="plug" href="/integrations/overview">
+    Browse supported integrations across communication, productivity, developer tools, finance, and more.
+  </Card>
+  <Card title="Dashboard" icon="chart-line" href="/dashboard/overview">
+    Browse apps, manage connections, inspect usage, and handle billing from the dashboard.
+  </Card>
+  <Card title="Developer API" icon="code" href="/api/overview">
+    Call your connected apps directly over HTTP — executions, the confirm field, file uploads, and flows, with curl examples.
+  </Card>
+</CardGroup>
+
+## Get started in 3 steps
+
+<Steps>
+  <Step title="Sign up at claw-link.dev">
+    Create your account at [claw-link.dev](https://claw-link.dev). New accounts start with a 7-day free trial — your first app is included, no card required.
+  </Step>
+  <Step title="Install ClawLink in your agent client">
+    For OpenClaw, install the plugin:
+
+    ```bash
+    openclaw plugins install clawhub:clawlink-plugin
+    openclaw gateway restart
+    ```
+
+    You can also install from npm with `openclaw plugins install @useclawlink/openclaw-plugin`.
+
+    For Hermes, open **Dashboard > Install** and copy the current Hermes setup prompt.
+  </Step>
+  <Step title="Connect your first app">
+    Open **Dashboard > Connections**, click **Add connection**, and finish the hosted flow for the app you want to use. After that, ask your agent to use it.
+  </Step>
+</Steps>
+
+## What you can do
+
+Once connected, your AI agent can perform actions like:
+
+- **"Send an email to sarah@example.com"** — via Gmail
+- **"Post a message in #general"** — via Slack
+- **"Create a GitHub issue titled 'Fix login bug'"** — via GitHub
+- **"Add a row to my Google Sheet"** — via Google Sheets
+- **"List my recent Stripe customers"** — via Stripe
+
+<Note>
+  Normal setup does not require copying a raw API key. Browser pairing is the recommended flow. API keys in Settings are an advanced fallback for debugging and older manual setup paths. To call ClawLink over HTTP directly, see the [Developer API](/api/overview).
+</Note>

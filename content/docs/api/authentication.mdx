@@ -1,0 +1,78 @@
+---
+title: "Authentication"
+description: "Authenticate Developer API requests with a ClawLink API key."
+icon: "Key"
+---
+
+Every Developer API request authenticates with a ClawLink API key. Keys start with the
+prefix `cllk_live_`.
+
+## Get an API key
+
+1. Open the [ClawLink dashboard](https://claw-link.dev).
+2. Go to **Settings → API Keys**.
+3. Create a key and copy it.
+
+<Warning>
+  The raw key is shown **once** at creation time and is never stored on our servers (we
+  keep only a hash). If you lose it, create a new one. Treat it like a password — it can
+  act on every app you have connected.
+</Warning>
+
+## Send the key
+
+Pass the key on every request using **either** of these headers:
+
+<CodeGroup>
+
+```bash title="Authorization (Bearer)"
+curl https://claw-link.dev/api/agent/whoami \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY"
+```
+
+```bash title="x-clawlink-api-key"
+curl https://claw-link.dev/api/agent/whoami \
+  -H "x-clawlink-api-key: cllk_live_YOUR_KEY"
+```
+
+</CodeGroup>
+
+If both are present, `x-clawlink-api-key` wins. Either form works on every endpoint in
+this section.
+
+## Verify a key
+
+`GET /api/agent/whoami` is the cheapest way to confirm a key is valid and see which
+account it belongs to:
+
+```bash
+curl https://claw-link.dev/api/agent/whoami \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY"
+```
+
+```json
+{
+  "user_id": "usr_123",
+  "workspace_id": "usr_123",
+  "workspace_name": "you@example.com",
+  "environment": "production",
+  "region": "global",
+  "capabilities": { "can_execute": true, "can_begin_connection": true }
+}
+```
+
+## Unauthorized responses
+
+A missing or invalid key returns `401`:
+
+```json
+{ "error": "Unauthorized" }
+```
+
+This is also what you get if the key was revoked. Create a fresh key in **Settings → API
+Keys** and retry.
+
+<Note>
+  A key represents a single ClawLink user. All executions, file uploads, and flows run
+  against that user's connected apps — there is no separate per-app token.
+</Note>

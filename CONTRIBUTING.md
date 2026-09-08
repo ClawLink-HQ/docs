@@ -1,34 +1,34 @@
-> **Customize this file**: Tailor this template to your project by noting specific contribution types you're looking for, adding a Code of Conduct, or adjusting the writing guidelines to match your style.
+# Contributing
 
-# Contribute to the documentation
+## Setup
 
-Thank you for your interest in contributing to our documentation! This guide will help you get started.
+```bash
+npm install
+npm run dev
+```
 
-## How to contribute
+## Making changes
 
-### Option 1: Edit directly on GitHub
+1. Edit or add MDX files under `content/docs/`.
+2. Register new pages in the relevant `meta.json` so they appear in the sidebar.
+3. Run `npm run build` before opening a pull request — it type-checks the site
+   and fails on broken MDX or invalid links between components.
 
-1. Navigate to the page you want to edit
-2. Click the "Edit this file" button (the pencil icon)
-3. Make your changes and submit a pull request
+## Conventions
 
-### Option 2: Local development
+- Frontmatter needs `title` and `description`; add an `icon` (any
+  [lucide](https://lucide.dev) icon name) for pages listed in the sidebar.
+- Use active voice and second person ("you").
+- One idea per sentence; sentence case for headings.
+- Bold for UI elements (Click **Settings**), code formatting for file names,
+  commands, and paths.
+- Prefer the Fumadocs components (`Callout`, `Cards`, `Tabs`, `Steps`) in new
+  pages. The Mintlify-era components still render, but they exist for the
+  migrated content.
 
-1. Fork and clone this repository
-2. Install the Mintlify CLI: `npm i -g mint`
-3. Create a branch for your changes
-4. Make changes
-5. Navigate to the docs directory and run `mint dev`
-6. Preview your changes at `http://localhost:3000`
-7. Commit your changes and submit a pull request
+## URLs
 
-For more details on local development, see our [development guide](development.mdx).
-
-## Writing guidelines
-
-- **Use active voice**: "Run the command" not "The command should be run"
-- **Address the reader directly**: Use "you" instead of "the user"
-- **Keep sentences concise**: Aim for one idea per sentence
-- **Lead with the goal**: Start instructions with what the user wants to accomplish
-- **Use consistent terminology**: Don't alternate between synonyms for the same concept
-- **Include examples**: Show, don't just tell
+Page URLs come from the file path, except that the `content/docs/overview/`
+prefix is stripped — `content/docs/overview/faq.mdx` serves at `/faq`. Keep
+existing paths stable; they are linked from the app and indexed by search
+engines.

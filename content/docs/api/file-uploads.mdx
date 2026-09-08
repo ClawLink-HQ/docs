@@ -1,0 +1,155 @@
+---
+title: "File uploads"
+description: "Attach images and documents to actions — public URLs, the file-uploadable shape, and the base64 envelope for local bytes."
+icon: "Paperclip"
+---
+
+Some actions take files — an Instagram photo, a Google Drive upload, a LinkedIn image, a
+Canva import. ClawLink accepts files in two ways depending on the action's schema, and the
+**easiest path is almost always a public URL**, which ClawLink fetches and re-hosts for
+the provider automatically.
+
+## How file fields appear
+
+An action's `input` exposes files in one of two shapes:
+
+1. **A URL field** — e.g. Instagram's `image_url`. Pass a URL string directly.
+2. **A file-uploadable object** — e.g. Google Drive's `file_to_upload` or LinkedIn's
+   `images[]`. Pass an object: `{ "name", "mimetype", "s3key" }`.
+
+Use [`GET /api/actions/{integration_id}/{action_id}`](/api/executions#get-an-action-schema)
+to see which fields an action has.
+
+## The easy path: a public URL
+
+For either shape, hand ClawLink a public HTTPS URL and it does the rest — fetches the
+bytes server-side and uploads them to the provider. No client-side file handling needed,
+which makes this the right approach for raw HTTP, MCP, Hermes, and CLI callers.
+
+<CodeGroup>
+
+```json title="URL field (Instagram)"
+{
+  "integration_id": "instagram",
+  "action_id": "post_ig_user_media",
+  "input": {
+    "image_url": "https://example.com/photo.jpg",
+    "caption": "Posted via ClawLink"
+  },
+  "confirm": true
+}
+```
+
+```json title="File-uploadable field (Google Drive)"
+{
+  "integration_id": "google-drive",
+  "action_id": "upload_file",
+  "input": {
+    "file_to_upload": {
+      "name": "report.pdf",
+      "mimetype": "application/pdf",
+      "s3key": "https://example.com/report.pdf"
+    }
+  },
+  "confirm": true
+}
+```
+
+</CodeGroup>
+
+### URL rules
+
+- Must be **publicly reachable** and serve the **raw file bytes** — not an HTML page, and
+  not behind a login.
+- **Share links are handled for you.** Google Drive (`drive.google.com`) and Dropbox
+  links are automatically rewritten to direct-download form. Query-string / signed URLs
+  and most CDNs work as-is.
+- **Private/LAN addresses are rejected** (`localhost`, `127.0.0.1`, `10.x`, `192.168.x`,
+  etc.) — the server can't reach them.
+- If a URL returns HTML instead of bytes, ClawLink makes one attempt to resolve a social
+  preview image (`og:image` / `twitter:image`) before failing with `media_url_not_a_file`.
+
+## The file-uploadable shape
+
+When a field is a file-uploadable object, its `s3key` is flexible:
+
+<ParamField body="name" type="string" required>
+  Filename, e.g. `"photo.jpg"`.
+</ParamField>
+<ParamField body="mimetype" type="string" required>
+  MIME type, e.g. `"image/jpeg"`, `"application/pdf"`.
+</ParamField>
+<ParamField body="s3key" type="string" required>
+  One of: a **public HTTPS URL** (re-hosted for you, above); an **Apollo key** returned by
+  a prior ClawLink upload (passed through unchanged); or, **only when using the OpenClaw
+  npm plugin**, a local file path under an OpenClaw media directory.
+</ParamField>
+
+<Note>
+  If you accidentally send the reference under `url` or `path` instead of `s3key`, the
+  relay still recovers it — but `s3key` is the documented field.
+</Note>
+
+## Uploading local bytes over raw HTTP
+
+If your file is on your own machine (not a public URL), use the **base64 `files`
+envelope** on the tool endpoint, `POST /api/tools/{tool_name}/execute`. This is the only
+way to send raw bytes directly.
+
+How it links up: set the file-uploadable field's `s3key` to any placeholder string, then
+add a `files[]` entry whose `pointer` **equals that same string**. ClawLink matches
+`files[].pointer === arguments.<field>.s3key`, uploads the bytes, and rewrites the key
+before calling the provider.
+
+```bash
+curl -X POST https://claw-link.dev/api/tools/googledrive_upload_file/execute \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "arguments": {
+      "file_to_upload": { "name": "report.pdf", "mimetype": "application/pdf", "s3key": "report.pdf" }
+    },
+    "files": [
+      {
+        "pointer": "report.pdf",
+        "name": "report.pdf",
+        "mimetype": "application/pdf",
+        "md5": "9e107d9d372bb6826bd81d3542a419d6",
+        "dataBase64": "JVBERi0xLjQKJ…"
+      }
+    ],
+    "confirmed": true
+  }'
+```
+
+Each `files[]` entry requires all five string fields: `pointer`, `name`, `mimetype`,
+`md5` (hex MD5 of the decoded bytes), and `dataBase64`.
+
+<Warning>
+  The base64 `files` envelope works **only** on `/api/tools/{tool_name}/execute`. The
+  canonical `/api/executions` endpoint does not accept `files` — there, put a public URL
+  in `input` instead.
+</Warning>
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| Max size per file | 25 MB |
+| Max total bytes per `/api/tools/.../execute` request | 100 MB |
+
+## Agent-runtime upload (curl ingest)
+
+When an **agent** (OpenClaw ClawHub plugin, CLI, MCP, Hermes) calls a tool with a local
+path it can't read, the action fails with `missing_file_bytes` and the error `hint`
+contains a ready-to-run `curl` line pointing at `POST /api/files/ingest`. The agent's
+shell runs it to upload the bytes and gets back an Apollo `s3key` to retry with.
+
+This endpoint is authenticated by a short-lived, single-use HMAC token that ClawLink mints
+**inside that error hint** — you don't call it cold. As a direct HTTP caller, prefer a
+public URL or the base64 `files` envelope above.
+
+<Note>
+  Local-file upload requires the server-side `FILE_INGEST_SECRET` to be configured. If it
+  isn't, `/api/files/ingest` returns `503` and only the URL / base64 paths are available.
+</Note>

@@ -1,0 +1,98 @@
+---
+title: "Troubleshooting"
+description: "Fix common issues with ClawLink integrations and agent connectivity"
+icon: "Wrench"
+---
+
+<Tip>
+  Start every debugging session with **Usage**. Open the logs to see exactly which integration was called, what action was attempted, and any error message returned. Most issues can be diagnosed in under a minute from the logs alone.
+</Tip>
+
+## Start here
+
+When something breaks, sort it into one of these buckets first:
+
+- **Setup and pairing**: install, browser approval, missing tools, stale sessions
+- **Connections**: reconnect flows, expired provider auth, missing permissions
+- **Execution**: the agent called a tool but the result failed or never returned
+- **Routing**: the right bot is online, but the wrong session or channel is receiving traffic
+
+## Common fixes
+
+<AccordionGroup>
+  <Accordion title="Connection shows 'Needs reconnect'">
+    A **Needs reconnect** status usually means the provider credential expired, was revoked, or needs fresh consent.
+
+    Go to **Connections**, expand the row, and run **Reconnect**. Then retry the same task from your agent.
+  </Accordion>
+
+  <Accordion title="ClawLink tools are missing in OpenClaw">
+    The most common causes are a stale chat session after install, or a client that has not reloaded the ClawLink plugin. **To fix this:**
+
+    - Start a **fresh chat** after installing the plugin so it picks up the new tool catalog.
+    - Restart the client (for OpenClaw, `openclaw gateway restart`) so the plugin reloads.
+    - Confirm the device is paired and your apps show as connected in **Dashboard > Connections**.
+    - Still missing? Check **Usage** for failed calls, or re-run browser pairing from **Settings > API Keys**.
+  </Accordion>
+
+  <Accordion title="API calls are failing">
+    Open **Usage** and inspect the failed request first. The log tells you which integration ran, which action was attempted, and whether the problem is likely connection-related or provider-side.
+
+    Common causes include invalid parameters, expired auth, missing scopes, or a temporary provider outage.
+  </Accordion>
+
+  <Accordion title="Pairing link expired or approval did not finish">
+    Pairing links are short lived. If the browser page says the session expired, or OpenClaw never finishes after you approved it, start a fresh pairing flow.
+
+    **To fix this:**
+
+    <Steps>
+      <Step title="Start pairing again from OpenClaw">
+        Ask OpenClaw to set up ClawLink or start pairing again.
+      </Step>
+      <Step title="Approve the new browser URL">
+        Open the new pairing URL, sign in if needed, and click **Approve this device**.
+      </Step>
+      <Step title="Return to OpenClaw">
+        After approval, go back to OpenClaw so the plugin can finish the local save step.
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion title="Rate limit errors">
+    Rate limit errors usually come from the provider, not ClawLink. ClawLink retries transient failures automatically, but repeated bursts can still fail if the provider account limit is too low for the workflow.
+
+    Slow down the workflow or reduce how often the agent triggers that provider.
+  </Accordion>
+
+  <Accordion title="OAuth token expired (Gmail, Google Sheets, etc.)">
+    Some integrations—including Gmail, Google Sheets, and Google Calendar—use OAuth tokens that expire over time. When a token expires, the integration will stop working until you refresh it.
+
+    **To fix this:**
+
+    <Steps>
+      <Step title="Go to Dashboard > Connections">
+        Open your dashboard and navigate to **Connections**.
+      </Step>
+      <Step title="Reconnect to get a fresh token">
+        Expand the affected row and click **Reconnect**. This runs the hosted provider flow again and refreshes the token.
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion title="Manual API key setup is not working">
+    Manual key entry is a fallback path. If it fails, the simplest fix is usually to switch back to browser pairing.
+
+    **Check the following:**
+
+    - Make sure the key starts with `cllk_live_...`
+    - Confirm you copied the raw key when it was first shown after creation
+    - Revoke old keys you no longer trust and create a fresh one if needed
+    - If possible, remove the manual key and run browser pairing instead
+  </Accordion>
+
+</AccordionGroup>
+
+## Deep-dive articles
+
+For narrower client-side issues (OpenClaw gateway behavior, session routing, token usage), see the official OpenClaw documentation. For anything between your agent and ClawLink — connections, pairing, execution failures — start in **Usage** and work through the common fixes above.

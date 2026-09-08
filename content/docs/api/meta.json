@@ -1,0 +1,14 @@
+{
+  "title": "API Reference",
+  "description": "Every ClawLink HTTP endpoint, grouped by resource",
+  "icon": "Code",
+  "root": true,
+  "pages": [
+    "overview",
+    "authentication",
+    "executions",
+    "flows",
+    "file-uploads",
+    "errors"
+  ]
+}
