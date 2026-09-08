@@ -3,37 +3,14 @@ title: "Connect OpenClaw to Stripe"
 description: "Install ClawLink, pair it, connect Stripe, and start using it from OpenClaw."
 ---
 
-# Connect OpenClaw to Stripe
 
 Use this if you want OpenClaw to help with Stripe customers, invoices, subscriptions, and billing workflows.
 
-## Copy and paste this
+## Set up ClawLink
 
-```bash
-openclaw plugins install clawhub:clawlink-plugin
-```
+<SetupTabs app="Stripe" />
 
-## Simple setup
-
-<Steps>
-  <Step title="Install the plugin">
-    Run the command above in OpenClaw.
-  </Step>
-  <Step title="Pair ClawLink">
-    Ask OpenClaw to set up ClawLink or pair ClawLink.
-  </Step>
-  <Step title="Approve in your browser">
-    Open the link OpenClaw gives you and approve the device.
-  </Step>
-  <Step title="Connect Stripe">
-    Go to the ClawLink dashboard and connect **Stripe**.
-  </Step>
-  <Step title="Start using it">
-    Go back to OpenClaw and ask it to use Stripe.
-  </Step>
-</Steps>
-
-## ![Wrench icon](/images/icons/wrench.svg) At a glance
+## At a glance
 
 - Useful for payment lookups, invoice workflows, and billing support tasks.
 - Stripe access should be scoped carefully because billing data is sensitive.
@@ -48,7 +25,7 @@ openclaw plugins install clawhub:clawlink-plugin
 
 ## If it does not work
 
-- Start a new OpenClaw chat after installing the plugin
+- Start a fresh agent session after setup so the ClawLink tools load
 - Make sure you approved the browser pairing flow
 - Make sure Stripe is connected in the ClawLink dashboard
 - Confirm the connected Stripe credentials have access to the data and actions you expect
@@ -57,7 +34,7 @@ openclaw plugins install clawhub:clawlink-plugin
 
 - [Integrations overview](/integrations/overview)
 - [Troubleshooting](/troubleshooting)
-- [OpenClaw setup](/openclaw)
+- [Install ClawLink](/install) — CLI, Hermes, and OpenClaw
 
 ## Links
 

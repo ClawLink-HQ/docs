@@ -3,37 +3,14 @@ title: "Connect OpenClaw to GitHub"
 description: "Install ClawLink, pair it, connect GitHub, and start using it from OpenClaw."
 ---
 
-# Connect OpenClaw to GitHub
 
 Use this if you want OpenClaw to help with repos, issues, pull requests, and engineering workflows in GitHub.
 
-## Copy and paste this
+## Set up ClawLink
 
-```bash
-openclaw plugins install clawhub:clawlink-plugin
-```
+<SetupTabs app="GitHub" />
 
-## Simple setup
-
-<Steps>
-  <Step title="Install the plugin">
-    Run the command above in OpenClaw.
-  </Step>
-  <Step title="Pair ClawLink">
-    Ask OpenClaw to set up ClawLink or pair ClawLink.
-  </Step>
-  <Step title="Approve in your browser">
-    Open the link OpenClaw gives you and approve the device.
-  </Step>
-  <Step title="Connect GitHub">
-    Go to the ClawLink dashboard and connect **GitHub**.
-  </Step>
-  <Step title="Start using it">
-    Go back to OpenClaw and ask it to use GitHub.
-  </Step>
-</Steps>
-
-## ![Wrench icon](/images/icons/wrench.svg) At a glance
+## At a glance
 
 - Good for issue triage, repo lookups, PR support, and lightweight engineering ops.
 - Works best when the connected GitHub account already has repo access in the org you care about.
@@ -48,7 +25,7 @@ openclaw plugins install clawhub:clawlink-plugin
 
 ## If it does not work
 
-- Start a new OpenClaw chat after installing the plugin
+- Start a fresh agent session after setup so the ClawLink tools load
 - Make sure you approved the browser pairing flow
 - Make sure GitHub is connected in the ClawLink dashboard
 - Confirm the connected GitHub account or token has repo access to the target project
@@ -57,7 +34,7 @@ openclaw plugins install clawhub:clawlink-plugin
 
 - [Integrations overview](/integrations/overview)
 - [Troubleshooting](/troubleshooting)
-- [OpenClaw setup](/openclaw)
+- [Install ClawLink](/install) — CLI, Hermes, and OpenClaw
 
 ## Links
 

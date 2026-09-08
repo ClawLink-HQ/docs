@@ -6,19 +6,36 @@ icon: "Sparkles"
 
 ClawLink also works with Hermes. The flow is the same at a high level: install the ClawLink plugin, approve the browser pairing flow, then connect the apps you want from the dashboard.
 
-## Recommended flow
+## Set up ClawLink for Hermes
+
+Install the plugin, pair the device, then connect apps:
 
 <Steps>
-  <Step title="Open the Install page in the dashboard">
-    Sign in at [claw-link.dev](https://claw-link.dev), then open **Dashboard > Install**.
+  <Step title="Install the plugin">
+    ```bash
+    hermes plugins install ClawLink-HQ/hermes-plugin --enable
+    ```
   </Step>
 
-  <Step title="Copy the Hermes setup prompt">
-    The Install page gives you the current Hermes bootstrap prompt. Paste that prompt into your Hermes chat.
+  <Step title="Start pairing">
+    ```bash
+    hermes clawlink begin
+    ```
+
+    This prints a browser approval link.
   </Step>
 
-  <Step title="Let Hermes install and start pairing">
-    Hermes will walk through the plugin setup and return a browser approval link. Open that link and approve the device.
+  <Step title="Approve in your browser">
+    Open the link and approve the device.
+  </Step>
+
+  <Step title="Finish setup">
+    ```bash
+    hermes clawlink finish
+    hermes clawlink test
+    ```
+
+    `test` confirms ClawLink is ready.
   </Step>
 
   <Step title="Connect your first app">
@@ -29,6 +46,12 @@ ClawLink also works with Hermes. The flow is the same at a high level: install t
     Once the connection is ready, Hermes can call the app tools directly from chat.
   </Step>
 </Steps>
+
+<Tip>
+  You can also hand the whole flow to Hermes as one prompt — **Dashboard > Install**
+  has a copyable version. Not using Hermes? See [Install ClawLink](/install) for the
+  agent-agnostic CLI and the OpenClaw plugin.
+</Tip>
 
 ## Good first tasks
 

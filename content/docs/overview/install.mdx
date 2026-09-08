@@ -1,0 +1,47 @@
+---
+title: "Install ClawLink"
+description: "Three ways to set up ClawLink: the agent-agnostic CLI, the Hermes plugin, or the OpenClaw plugin"
+icon: "Download"
+---
+
+ClawLink supports three setup paths. They all end in the same place — a paired
+device and a dashboard where you connect apps — so pick whichever matches how
+you work.
+
+| Path | Use it when |
+| --- | --- |
+| **Agents** (`@useclawlink/cli`) | You use any agent, or more than one. This is the agent-agnostic route and the one most people want. |
+| **Hermes** | You run Hermes and want the plugin wired into it directly. |
+| **OpenClaw** | You run OpenClaw and want the ClawHub plugin. |
+
+<Note>
+  Before you start, create an account at [claw-link.dev](https://claw-link.dev). New
+  accounts get a 7-day free trial and the first app is included, no card required.
+</Note>
+
+## Pick your path
+
+<SetupTabs app="your first app" />
+
+## After setup
+
+Whichever path you used, the rest is the same:
+
+<Steps>
+  <Step title="Connect an app">
+    In the dashboard, open **Connections** → **Add connection**, pick the app, and
+    complete the hosted flow. See [Connecting accounts](/dashboard/integrations).
+  </Step>
+  <Step title="Check it worked">
+    Ask your agent to do something small with the app — read the latest email, list
+    a few issues. [Request logs](/dashboard/request-logs) show every call.
+  </Step>
+</Steps>
+
+## Deep dives
+
+- [OpenClaw setup](/openclaw) — plugin details, supported paths, and verification
+- [Hermes setup](/hermes) — the Hermes flow end to end
+- [How it works](/how-it-works) — what happens between your agent and the app
+
+If setup does not finish, see [Troubleshooting](/troubleshooting).
