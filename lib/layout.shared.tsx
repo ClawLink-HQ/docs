@@ -19,7 +19,7 @@ export function baseOptions(): BaseLayoutProps {
       ),
       url: '/',
     },
-    githubUrl: `https://github.com/${gitConfig.user}/clawlink`,
+    githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
     links: [
       {
         type: 'button',
