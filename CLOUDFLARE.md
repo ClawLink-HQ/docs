@@ -2,6 +2,17 @@
 
 The site is a static export, so Cloudflare Pages needs no adapter or runtime.
 
+## Current state
+
+`clawlink-docs-preview` is a **Direct Upload** project used to verify builds on
+Cloudflare's CDN: <https://clawlink-docs-preview.pages.dev>. It is deployed by
+hand with `npx wrangler pages deploy out --project-name clawlink-docs-preview`.
+
+Production should be a separate **Git-connected** project named `clawlink-docs`.
+A Pages project is permanently either Direct Upload or Git-connected — one
+cannot be converted into the other — which is why the verification project uses
+a different name.
+
 ## Connect the project
 
 1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
