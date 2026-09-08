@@ -16,8 +16,13 @@ export const metadata: Metadata = {
   },
   description: appDescription,
   icons: {
-    icon: '/images/logo/favicon.png',
-    shortcut: '/images/logo/favicon.ico',
+    icon: [
+      { url: '/images/logo/favicon.ico', sizes: 'any' },
+      { url: '/images/logo/icon-32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/images/logo/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/images/logo/icon-512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: '/images/logo/apple-touch-icon.png',
   },
   openGraph: {
     siteName: appName,
