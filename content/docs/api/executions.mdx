@@ -1,0 +1,349 @@
+---
+title: "Executing actions"
+description: "Run an action on a connected app with POST /api/executions, including the confirm field and runnable curl for Gmail, Slack, and Instagram."
+icon: "Play"
+---
+
+An **execution** runs one action on one of your connected apps. The recommended endpoint
+is `POST /api/executions`, which uses the canonical `integration_id` + `action_id` +
+`input` model.
+
+## `POST /api/executions`
+
+<ParamField body="integration_id" type="string" required>
+  The integration slug, e.g. `gmail`, `slack`, `instagram`. See
+  [discovering actions](#discovering-actions).
+</ParamField>
+
+<ParamField body="action_id" type="string" required>
+  The action to run, e.g. `send_email`. This is the tool name with the integration prefix
+  removed (`gmail_send_email` → `send_email`). The full tool name (`gmail_send_email`)
+  also works.
+</ParamField>
+
+<ParamField body="input" type="object" required>
+  The action's arguments. Field names are specific to each action — fetch them with
+  [`GET /api/actions/{integration_id}/{action_id}`](#get-an-action-schema).
+</ParamField>
+
+<ParamField body="confirm" type="boolean" default="false">
+  Required (`true`) for any write or destructive action. See [The confirm field](#the-confirm-field).
+</ParamField>
+
+<ParamField body="idempotency_key" type="string">
+  Optional client-supplied key to safely retry a request without running the action twice.
+</ParamField>
+
+<Note>
+  `POST /api/executions` runs against your **default connection** for the integration. If
+  you have multiple connections for the same app and need to target a specific one, use
+  the [tool endpoint](#alternative-tool-name-endpoint) with `connectionId`.
+</Note>
+
+### Response
+
+The response is a normalized execution summary. `status` is the field to branch on.
+
+<ResponseField name="status" type="string">
+  `succeeded`, `blocked`, or `failed`.
+</ResponseField>
+<ResponseField name="execution_id" type="string | null">
+  Stable ID of the run. `null` when the action was `blocked` before running (e.g. missing
+  confirmation). Pass to [`GET /api/executions/{id}`](#fetch-a-past-execution).
+</ResponseField>
+<ResponseField name="integration_id" type="string" />
+<ResponseField name="action_id" type="string" />
+<ResponseField name="started_at" type="string">ISO 8601 timestamp.</ResponseField>
+<ResponseField name="finished_at" type="string">ISO 8601 timestamp.</ResponseField>
+<ResponseField name="output" type="any">
+  The provider's result payload. Present on success.
+</ResponseField>
+<ResponseField name="display" type="object">
+  `{ title, summary }` — a short human-readable description of the outcome.
+</ResponseField>
+<ResponseField name="error_code" type="string">
+  Present when `blocked` or `failed`. See [Errors](/api/errors).
+</ResponseField>
+<ResponseField name="message" type="string">
+  Human-readable error message (on `blocked` / `failed`).
+</ResponseField>
+<ResponseField name="hint" type="string">
+  Actionable guidance for recovering from a failure, when available.
+</ResponseField>
+<ResponseField name="recommended_next_action" type="object">
+  e.g. `{ "tool": "clawlink.connect_app", "input": { "integration_id": "gmail" } }` when
+  the app needs connecting or re-authing.
+</ResponseField>
+
+**HTTP status:** `200` succeeded · `409` blocked · `500` failed. A malformed request
+(missing `integration_id`/`action_id`/`input`) returns `400`.
+
+<CodeGroup>
+
+```json title="Succeeded (200)"
+{
+  "execution_id": "f3c1…",
+  "status": "succeeded",
+  "integration_id": "gmail",
+  "action_id": "send_email",
+  "started_at": "2026-06-28T10:00:00.000Z",
+  "finished_at": "2026-06-28T10:00:01.200Z",
+  "output": { "id": "1990…", "threadId": "1990…", "labelIds": ["SENT"] },
+  "display": { "title": "gmail_send_email succeeded", "summary": "Executed gmail_send_email successfully." }
+}
+```
+
+```json title="Blocked (409)"
+{
+  "execution_id": null,
+  "status": "blocked",
+  "integration_id": "gmail",
+  "action_id": "send_email",
+  "started_at": "2026-06-28T10:00:00.000Z",
+  "finished_at": "2026-06-28T10:00:00.010Z",
+  "display": { "title": "Execution blocked", "summary": "gmail_send_email requires explicit confirmation before execution." },
+  "error_code": "policy_blocked",
+  "message": "gmail_send_email requires explicit confirmation before execution."
+}
+```
+
+```json title="Failed (500)"
+{
+  "execution_id": "a91b…",
+  "status": "failed",
+  "integration_id": "gmail",
+  "action_id": "send_email",
+  "started_at": "2026-06-28T10:00:00.000Z",
+  "finished_at": "2026-06-28T10:00:00.800Z",
+  "display": { "title": "Execution failed", "summary": "…" },
+  "error_code": "execution_failed",
+  "message": "…"
+}
+```
+
+</CodeGroup>
+
+## The confirm field
+
+Read-only actions run immediately. **Write and destructive actions require
+`confirm: true`** — this is a deliberate safety gate so an agent can't send an email or
+delete a record without an explicit go-ahead.
+
+If you omit `confirm` (or set it `false`) on a write action, the execution is **blocked
+before it runs**:
+
+- `status` is `"blocked"`, `execution_id` is `null`
+- `error_code` is `"policy_blocked"`
+- HTTP status is `409`
+
+To proceed, repeat the request with `confirm: true`.
+
+<Tip>
+  Not sure if an action is a write? Fetch it with
+  [`GET /api/actions/{integration_id}/{action_id}`](#get-an-action-schema) and check
+  `side_effect_level` (`read` / `write` / `delete` / `admin`) and `requires_confirmation`.
+</Tip>
+
+## Examples
+
+Field names below come from each action's schema. Always confirm them with
+[`GET /api/actions/{integration_id}/{action_id}`](#get-an-action-schema) before going
+to production — schemas can change.
+
+<Tabs>
+
+<Tab title="Gmail">
+
+Send an email (`gmail` · `send_email`). `user_id` must be the literal string `"me"`.
+
+```bash
+curl -X POST https://claw-link.dev/api/executions \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "integration_id": "gmail",
+    "action_id": "send_email",
+    "input": {
+      "user_id": "me",
+      "to": ["sarah@example.com"],
+      "subject": "Hello from the API",
+      "body": "Sent directly through ClawLink.",
+      "is_html": false
+    },
+    "confirm": true
+  }'
+```
+
+</Tab>
+
+<Tab title="Slack">
+
+Post a message to a channel (`slack` · `send_message`). Provide at least one of `text`,
+`markdown_text`, or `blocks`.
+
+```bash
+curl -X POST https://claw-link.dev/api/executions \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "integration_id": "slack",
+    "action_id": "send_message",
+    "input": {
+      "channel": "#general",
+      "text": "Deploy finished :rocket:"
+    },
+    "confirm": true
+  }'
+```
+
+</Tab>
+
+<Tab title="Instagram">
+
+Publishing a photo is a **two-step** action. First create a media container with a
+**public image URL** (`instagram` · `post_ig_user_media`), then publish the returned
+`creation_id` (`post_ig_user_media_publish`).
+
+```bash
+# 1. Create the media container
+curl -X POST https://claw-link.dev/api/executions \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "integration_id": "instagram",
+    "action_id": "post_ig_user_media",
+    "input": {
+      "image_url": "https://example.com/photo.jpg",
+      "caption": "Posted via ClawLink"
+    },
+    "confirm": true
+  }'
+# → output contains the new container id, e.g. { "id": "1789…" }
+
+# 2. Publish it
+curl -X POST https://claw-link.dev/api/executions \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "integration_id": "instagram",
+    "action_id": "post_ig_user_media_publish",
+    "input": { "creation_id": "1789…" },
+    "confirm": true
+  }'
+```
+
+`image_url` can be almost any public URL — ClawLink fetches and re-hosts the bytes for
+Instagram. See [File uploads](/api/file-uploads) for the rules and for sending local
+files.
+
+</Tab>
+
+</Tabs>
+
+## Discovering actions
+
+You don't have to hard-code action IDs or guess input fields — the catalog is queryable.
+
+### List integrations
+
+```bash
+curl "https://claw-link.dev/api/integrations?connected_only=true" \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY"
+```
+
+Returns `{ items, page, page_size, total }`. Each item includes `integration_id`,
+`name`, `connected`, `connection_state`, and `capabilities` (the action IDs it supports).
+Query params: `query`, `category`, `connected_only`, `supports_action`, `page`,
+`page_size`.
+
+### List an integration's actions
+
+```bash
+curl "https://claw-link.dev/api/actions?integration_id=gmail" \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY"
+```
+
+Returns `{ integration_id, items: [...] }` where each item has `action_id`, `title`,
+`description`, and `side_effect_level`. Add `&intent=send%20an%20email` to rank by intent.
+
+### Get an action schema
+
+This is how you find the **exact `input` field names** for an action:
+
+```bash
+curl "https://claw-link.dev/api/actions/gmail/send_email" \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY"
+```
+
+Returns the action detail, including `input_schema` (full JSON Schema),
+`input_summary.required` / `input_summary.optional`, `requires_confirmation`,
+`side_effect_level`, `examples`, and `preconditions`.
+
+### Search the whole catalog
+
+```bash
+curl "https://claw-link.dev/api/search?query=send%20message&connected_only=true" \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY"
+```
+
+Returns `{ items: [{ kind, integration_id, action_id, title, summary, connected, connection_state }] }`.
+
+## Fetch a past execution
+
+```bash
+curl "https://claw-link.dev/api/executions/EXECUTION_ID" \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY"
+```
+
+Returns the same execution-summary shape with the stored `output`.
+
+## Alternative: tool-name endpoint
+
+`POST /api/tools/{tool_name}/execute` is the lower-level endpoint the OpenClaw plugin
+itself uses. Reach for it when you need to **target a specific connection** or **attach
+local file bytes** (see [File uploads](/api/file-uploads)). It is tool-name-centric — use
+the full tool name (e.g. `gmail_send_email`) in the path.
+
+<Warning>
+  Two differences from `/api/executions` that bite people:
+  - The confirmation field is **`confirmed`** (not `confirm`).
+  - Omitting it on a write returns HTTP **`412`** with `error.code: "confirmation_required"`
+    (the canonical endpoint returns `409`).
+</Warning>
+
+```bash
+curl -X POST https://claw-link.dev/api/tools/gmail_send_email/execute \
+  -H "Authorization: Bearer cllk_live_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "arguments": {
+      "user_id": "me",
+      "to": ["sarah@example.com"],
+      "subject": "Hello",
+      "body": "Sent via the tool endpoint."
+    },
+    "connectionId": 42,
+    "confirmed": true
+  }'
+```
+
+Request fields:
+
+<ParamField body="arguments" type="object">
+  The action arguments. If omitted, top-level keys (other than `connectionId`,
+  `confirmed`, `files`) are treated as the arguments.
+</ParamField>
+<ParamField body="connectionId" type="number | string">
+  Target a specific connection when you have more than one for the app. Omit to use the
+  default.
+</ParamField>
+<ParamField body="confirmed" type="boolean" default="false">
+  Confirmation gate for write actions (note the `-ed` spelling).
+</ParamField>
+<ParamField body="files" type="array">
+  Base64 file attachments. See [File uploads](/api/file-uploads).
+</ParamField>
+
+The response carries the raw execution payload (`ok`, `data`/`result`, `error`, `meta`)
+**plus** a `canonical` object with the same execution-summary shape as `/api/executions`.
+The `error` envelope is documented in [Errors](/api/errors).

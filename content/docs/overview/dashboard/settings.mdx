@@ -1,0 +1,55 @@
+---
+title: "Settings"
+description: "Manage your profile, advanced API keys, and account security handoff"
+icon: "Settings"
+---
+
+The Settings page currently has three tabs: **Profile**, **API Keys**, and **Security**. Billing is a separate page in the sidebar.
+
+## Profile
+
+The Profile tab shows your name, email address, and avatar.
+
+- **Name** — edit your display name and click **Save Changes** to update it.
+- **Email** — your email address is set by your login provider and cannot be changed here.
+- **Avatar** — click **Change Avatar** to upload a profile picture.
+
+## API keys
+
+This tab is for advanced and manual setups. Most users do not need it because browser pairing is the recommended OpenClaw setup flow.
+
+You can:
+
+- Create a new `cllk_live_...` key
+- Copy the raw value one time, immediately after creation
+- Review created and last-used timestamps for existing keys
+- Revoke a key you no longer trust
+
+<Warning>
+Raw key values are never shown again after creation. If you lose one, revoke it and create a new key instead of expecting the dashboard to reveal it again.
+</Warning>
+
+<Tip>
+Building against ClawLink's HTTP API with one of these keys? See the [Developer API](/api/overview) reference for endpoints, the `confirm` field, file uploads, and curl examples.
+</Tip>
+
+## Security
+
+The Security tab is a handoff into your hosted account management flow.
+
+Use **Manage** to open the account screen for:
+
+- Password and email changes
+- Connected sign-in methods
+- Any additional protections your identity provider supports
+
+ClawLink does not currently expose the old in-dashboard notifications controls described in earlier docs.
+
+## Billing lives separately
+
+Use the dedicated [Billing](/billing) page in the sidebar to:
+
+- Review your current plan
+- Upgrade to Starter or Ultra Heavy
+- Open the Polar customer portal
+- See whether the next new integration requires an upgrade

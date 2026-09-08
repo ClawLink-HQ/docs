@@ -1,0 +1,126 @@
+---
+title: "Build an OpenClaw sales assistant with Gmail and HubSpot"
+description: "Use ClawLink to connect Gmail and HubSpot so OpenClaw can help with lead follow-ups, deal prep, and inbox-to-CRM workflows."
+icon: "Target"
+---
+
+# Build an OpenClaw sales assistant with Gmail and HubSpot
+
+If you already live in email and CRM tabs, this is one of the most useful ClawLink setups.
+
+Connect **Gmail** and **HubSpot** to OpenClaw, and your assistant can help with things like:
+
+- finding the latest customer thread
+- summarizing deal context before you reply
+- drafting follow-ups from CRM notes
+- checking whether a contact or company already exists in HubSpot
+- turning messy sales activity into something less annoying
+
+Not magic. Just less tab-hopping.
+
+## What this workflow is good for
+
+This setup is useful when you want OpenClaw to help with:
+
+- inbox triage for sales conversations
+- contact and company lookups before replying
+- follow-up drafting after calls or demos
+- checking open deals and recent activity
+- turning email context into CRM updates faster
+
+## What you need first
+
+Before this works, you need:
+
+1. ClawLink paired with OpenClaw
+2. Gmail connected in ClawLink
+3. HubSpot connected in ClawLink
+
+If you have not done that yet, start here:
+
+- [Connect OpenClaw to Gmail](/integrations/openclaw-to-gmail)
+- [Connect OpenClaw to HubSpot](/integrations/openclaw-to-hubspot)
+- [OpenClaw setup](/openclaw)
+
+## Simple setup
+
+<Steps>
+  <Step title="Pair ClawLink with OpenClaw">
+    Install the plugin, start pairing from OpenClaw, and approve the device in your browser.
+  </Step>
+  <Step title="Connect Gmail">
+    In the ClawLink dashboard, connect the Gmail account you want OpenClaw to work with.
+  </Step>
+  <Step title="Connect HubSpot">
+    In the same dashboard, connect the HubSpot workspace with the contacts and deals you care about.
+  </Step>
+  <Step title="Start a fresh OpenClaw chat">
+    If you added the integrations after plugin install, start a fresh chat so OpenClaw reloads the tool catalog cleanly.
+  </Step>
+  <Step title="Test a small real task">
+    Start with one lookup or one draft instead of a giant multi-step workflow.
+  </Step>
+</Steps>
+
+## Example things to ask
+
+Try prompts like:
+
+- "Find the latest Gmail thread with Acme and summarize the conversation"
+- "Check whether Acme already exists in HubSpot and show me the latest deal context"
+- "Draft a follow-up email for this lead based on our last meeting notes"
+- "Summarize my sales emails from today and flag which ones look urgent"
+- "Look up this sender in HubSpot and tell me whether there is an open deal"
+
+## A practical daily workflow
+
+Here is the boring-but-actually-useful version:
+
+### 1) Morning inbox triage
+Ask OpenClaw to summarize recent Gmail conversations that look sales-related.
+
+### 2) Check CRM context
+Have it look up the company or contact in HubSpot before you reply.
+
+### 3) Draft the response
+Use the email thread plus CRM context to draft a follow-up.
+
+### 4) Decide what to send
+You still review the draft. Because handing a model your outbound sales voice with zero oversight is how weird emails happen.
+
+## What ClawLink adds here
+
+You could wire some of this manually, sure.
+
+But then you get to build and maintain:
+
+- hosted auth flows
+- token refresh
+- connection management
+- retries
+- request logging
+- all the annoying glue work that feels fun for about 18 minutes
+
+ClawLink handles the hosted connection layer so OpenClaw can focus on using the tools.
+
+## Common mistakes
+
+### Connecting the wrong Gmail account
+If results look empty or weird, check that the right mailbox is connected.
+
+### Connecting the wrong HubSpot workspace
+This one gets people constantly. The tools work, but against the wrong place.
+
+### Testing in an old chat
+If tools seem missing after setup, start a fresh chat.
+
+### Expecting perfect autonomous CRM hygiene on day one
+Start with lookup + summarize + draft workflows first. Those give value fast without turning the setup into an overcomplicated trust exercise.
+
+## Related guides
+
+- [Connect OpenClaw to Gmail](/integrations/openclaw-to-gmail)
+- [Connect OpenClaw to HubSpot](/integrations/openclaw-to-hubspot)
+- [Connect OpenClaw to Google Calendar](/integrations/openclaw-to-google-calendar)
+- [Troubleshooting](/troubleshooting)
+- [OpenClaw setup](/openclaw)

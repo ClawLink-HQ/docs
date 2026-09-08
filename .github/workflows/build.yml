@@ -1,0 +1,22 @@
+name: Build
+
+# Cloudflare Pages builds and deploys the site from its own Git integration.
+# This workflow is just the pull-request check: it fails on type errors,
+# broken MDX, and anything else that would break the Cloudflare build.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build

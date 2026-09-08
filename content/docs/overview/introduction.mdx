@@ -1,0 +1,52 @@
+---
+title: "Introduction"
+description: "What ClawLink is and why you'd use it"
+icon: "BookOpen"
+---
+
+ClawLink is an open-source integration platform and hosted connection layer for OpenClaw, Hermes, and similar agent workflows. It gives your agent one place to connect real apps without making you build provider auth flows, token refresh logic, and request plumbing yourself.
+
+## Why use ClawLink
+
+- **Hosted connect flows** — connect apps from the dashboard instead of hand-building provider auth setup.
+- **Browser pairing** — pair an OpenClaw or Hermes client once and keep provider credentials off the client machine.
+- **Managed credentials** — ClawLink stores provider credentials encrypted at rest and uses them only for authorized execution.
+- **Usage logs** — every tool call records status, latency, integration, and action so you can debug what actually happened.
+- **Built-in reliability** — retries, rate-limit handling, and connection-aware routing are built in.
+- **Simple pricing** — new accounts start with a 7-day free trial (first app included, no card), then **Starter** (\$4.99 your first month, then \$7.99/mo) or **Ultra Heavy** (\$19.99/mo, unlimited tool calls).
+
+## Supported integrations
+
+<CardGroup cols={2}>
+  <Card title="Communication" icon="message" href="/integrations/communication">
+    Gmail, Slack, Outlook, Discord, Telegram, Microsoft Teams
+  </Card>
+  <Card title="Productivity" icon="calendar" href="/integrations/productivity">
+    Google Sheets, Google Calendar, Google Drive, Notion, Airtable, Todoist
+  </Card>
+  <Card title="Developer Tools" icon="code" href="/integrations/developer-tools">
+    GitHub, GitLab, Jira, Linear, Vercel
+  </Card>
+  <Card title="CRM & Sales" icon="users" href="/integrations/crm-sales">
+    Apollo, HubSpot, Salesforce, Pipedrive
+  </Card>
+  <Card title="Payments & Finance" icon="credit-card" href="/integrations/payments">
+    Stripe, PayPal, QuickBooks, Xero
+  </Card>
+  <Card title="Social Media" icon="share" href="/integrations/social-media">
+    YouTube, X, LinkedIn, Instagram, Reddit
+  </Card>
+  <Card title="All Integrations" icon="grid" href="/integrations/overview">
+    Browse the current catalog and the most common setup guides.
+  </Card>
+</CardGroup>
+
+## Without ClawLink vs. with ClawLink
+
+| Without ClawLink | With ClawLink |
+|---|---|
+| Implement provider auth flows per integration | Start a hosted connect flow from the dashboard |
+| Store credentials locally or in your own vault | Credentials are managed by ClawLink |
+| Write retry and rate-limit logic yourself | Retries and rate-limit handling are built in |
+| No visibility into what your agent called | Usage logs show action, integration, status, and latency |
+| Hand-wire every client setup | Install once, pair once, then connect apps as needed |
