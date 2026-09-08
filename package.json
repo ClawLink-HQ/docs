@@ -9,6 +9,7 @@
     "types:check": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@icons-pack/react-simple-icons": "^13.15.1",
     "cn": "^0.2.4",
     "fumadocs-core": "16.15.8",
     "fumadocs-mdx": "15.4.0",

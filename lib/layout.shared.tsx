@@ -8,11 +8,11 @@ export function baseOptions(): BaseLayoutProps {
       title: (
         <>
           <Image
-            src="/images/logo/link.png"
+            src="/images/logo/rounded-clawlink.png"
             alt=""
-            width={22}
-            height={22}
-            className="rounded-sm"
+            width={24}
+            height={24}
+            priority
           />
           <span className="font-semibold text-[15px]">{appName}</span>
         </>
