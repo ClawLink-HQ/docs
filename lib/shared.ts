@@ -4,9 +4,9 @@ export const appName = 'ClawLink';
 export const appDescription =
   'Hosted integrations for OpenClaw, Hermes, and other agent workflows.';
 export const siteUrl = 'https://docs.claw-link.dev';
-// /dashboard is auth-gated and 404s when signed out; /sign-in works for
-// everyone and forwards signed-in users through to the dashboard.
-export const dashboardUrl = 'https://claw-link.dev/sign-in';
+// Signed-out visitors are redirected to /sign-in with a redirect_url back to
+// the dashboard, so this is the right target for both cases.
+export const dashboardUrl = 'https://claw-link.dev/dashboard';
 
 export const docsRoute = '/';
 export const docsImageRoute = '/og/docs';
