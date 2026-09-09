@@ -1,6 +1,6 @@
 ---
 title: "ClawLink Documentation"
-description: "Install ClawLink in OpenClaw or Hermes, pair your device, and connect apps through hosted flows."
+description: "Install ClawLink in any agent, pair your device, and connect apps through hosted flows."
 icon: "House"
 ---
 
@@ -37,16 +37,15 @@ ClawLink is the hosted integration layer for OpenClaw, Hermes, and similar agent
     Create your account at [claw-link.dev](https://claw-link.dev). New accounts start with a 7-day free trial — your first app is included, no card required.
   </Step>
   <Step title="Install ClawLink in your agent client">
-    For OpenClaw, install the plugin:
+    Works with any agent — Claude, ChatGPT, Hermes, OpenClaw, and others. Run this in your terminal, or paste it wherever you chat with your agent:
 
     ```bash
-    openclaw plugins install clawhub:clawlink-plugin
-    openclaw gateway restart
+    npx -y @useclawlink/cli login
     ```
 
-    You can also install from npm with `openclaw plugins install @useclawlink/openclaw-plugin`.
+    The command prints a link. Open it and approve the device.
 
-    For Hermes, open **Dashboard > Install** and copy the current Hermes setup prompt.
+    OpenClaw and Hermes also have native plugins. See [OpenClaw setup](/openclaw) and [Hermes setup](/hermes).
   </Step>
   <Step title="Connect your first app">
     Open **Dashboard > Connections**, click **Add connection**, and finish the hosted flow for the app you want to use. After that, ask your agent to use it.
