@@ -73,12 +73,18 @@ export function SetupTabs({ app }: { app: string }) {
   );
 }
 
-/** A copyable one-line command, styled like an MDX code block. */
+/**
+ * A copyable one-line command, styled like an MDX code block. The `line` class
+ * is what Shiki puts on each row of a highlighted block, and it carries the
+ * block's horizontal padding — without it the command touches the left border.
+ */
 function Command({ code }: { code: string }) {
   return (
     <Base.CodeBlock>
       <Base.Pre>
-        <code>{code}</code>
+        <code>
+          <span className="line">{code}</span>
+        </code>
       </Base.Pre>
     </Base.CodeBlock>
   );
