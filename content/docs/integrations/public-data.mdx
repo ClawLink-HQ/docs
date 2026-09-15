@@ -1,0 +1,292 @@
+---
+title: "Public data apps"
+description: "Read-only TikTok, Instagram, X, YouTube, LinkedIn, Spotify and other public data for your agent. Nothing to connect, paid per call from your credit."
+icon: "Radar"
+---
+
+Paste this into your agent to try one:
+
+```text
+Using tiktok-data, get the profile of @nasa and their 10 latest videos.
+Which one has the best like-to-view ratio?
+```
+
+Public data apps are the group marked **Included with ClawLink** on your Connections page. They read what anyone can see on a platform without logging in: profiles, posts, comments, search results, trends. There is nothing to connect. Every account has them from the first minute, and every call is paid from your credit balance instead of your plan.
+
+## How they work
+
+A normal ClawLink integration signs in to **your** account on the provider and acts as you. A public data app does not touch your account at all. ClawLink fetches the public page or endpoint through its own data providers, the same way a logged-out visitor would, and returns the structured result to your agent.
+
+That is why:
+
+- **Nothing to connect.** There is no OAuth screen and no API key, because the request is not made as you.
+- **You only get public data.** Private accounts, follower-only posts, DMs and anything behind a login are not reachable. LinkedIn shows a logged-out visitor much less than a signed-in member, so its profile action returns headline, location and follower count, not work history.
+- **Read-only.** Posting, liking, following, replying or deleting needs your own account's permission. For that, connect the regular app (Instagram, LinkedIn, YouTube, X and more) from the catalog: see [Social media integrations](/integrations/social-media). The two kinds work side by side: read a competitor's posts with the data app, then publish your reply through your connected account.
+
+<Note>
+  Data comes from the public web and platforms change what they show. A field that exists today can be empty tomorrow, and a heavily requested profile can return a temporary error. ClawLink retries transient errors inside one charge; a call that still fails is refunded.
+</Note>
+
+## What a call costs
+
+Each action has its own price, from **$0.002** for a TikTok or X read to **$0.10** for a LinkedIn post list. The price is written in every action's description, so your agent sees it before calling. Two rules:
+
+- **An empty result is still charged.** A search that finds nothing costs the same as one that finds ten results, because the provider charges us either way.
+- **A failed call is refunded.** If the provider errors after retries, the charge is reversed.
+
+Credit is separate from your plan: data calls never count against monthly tool calls. New accounts start with **$0.10 of free credit**. Top up in **Dashboard > Billing** with a $20, $50 or $100 pack. You can see every charge and refund in **Dashboard > Logs**.
+
+## How to prompt
+
+Name the app id (`tiktok-data`, `instagram-data`, and so on) when you want to be sure the agent uses public data rather than a connected account. Handles go without the `@`. Posts, videos and pages take their full public URL. Lists come in pages: the result carries a cursor, and asking for "the next page" makes the agent pass it back.
+
+```text
+Using instagram-data, compare @nike and @adidas: follower counts and the engagement on their last 5 posts each.
+```
+
+```text
+Using youtube-data, get the transcript of https://www.youtube.com/watch?v=… and give me the five main points.
+```
+
+```text
+Using facebook-data, search the Meta Ad Library for active ads mentioning "meal kit" in the US and summarize the offers.
+```
+
+## Apps and actions
+
+### TikTok
+
+App id: `tiktok-data`. 9 actions, $0.002 per call.
+
+```text
+Using tiktok-data, get the profile of @nasa and their 10 latest videos. Which one has the best like-to-view ratio?
+Search TikTok for videos about "cold brew" posted this week and list the top 5 by likes.
+What is trending on TikTok today? Give me the search terms.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `user_profile` | Public TikTok profile by username: follower and like counts, bio, verified flag, user id. | $0.002 |
+| `user_posts` | Recent public videos of a TikTok user with views, likes, comments and shares. | $0.002 |
+| `post_detail` | One TikTok video by URL: caption, author, stats, music and hashtags. | $0.002 |
+| `post_comments` | Comments on a TikTok video with like counts and reply counts. | $0.002 |
+| `search_videos` | Search public TikTok videos by keyword. | $0.002 |
+| `search_users` | Search public TikTok accounts by keyword. | $0.002 |
+| `hashtag_posts` | Videos under a TikTok hashtag. | $0.002 |
+| `hashtag_detail` | A TikTok hashtag's view count, video count and challengeID. | $0.002 |
+| `trending_searches` | Today's trending search terms on TikTok. | $0.002 |
+
+### Instagram
+
+App id: `instagram-data`. 8 actions, $0.004 per call.
+
+```text
+Using instagram-data, compare the follower counts and last 5 posts of @nike and @adidas.
+Pull the comments on this Instagram reel and summarize the sentiment: https://www.instagram.com/reel/…
+Find 10 Instagram accounts similar to @glossier.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `user_profile` | Public Instagram profile by username: follower, following and post counts, bio, category, verified flag. | $0.004 |
+| `user_posts` | Recent public posts of an Instagram account with likes, comments and captions. | $0.004 |
+| `user_reels` | Recent public reels of an Instagram account with play counts. | $0.004 |
+| `post_info` | One Instagram post or reel by URL: caption, media, likes, comments, author. | $0.004 |
+| `post_comments` | Comments on an Instagram post or reel. | $0.004 |
+| `hashtag_posts` | Public posts under an Instagram hashtag. | $0.004 |
+| `search_users` | Search public Instagram accounts by a keyword in their bio or captions. | $0.004 |
+| `similar_users` | Accounts Instagram suggests as similar to a given account. | $0.004 |
+
+### X
+
+App id: `x-data`. 6 actions, $0.002 per call.
+
+```text
+Using x-data, get the latest posts from @OpenAI and tell me which had the most reposts.
+Search X for "claw-link.dev" (Latest) and list who is talking about it.
+What is trending on X in the UnitedStates right now?
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `user_profile` | Public X (Twitter) profile by handle: followers, following, bio, verified flag. | $0.002 |
+| `user_posts` | Recent public posts of an X account with views, likes, reposts and replies. | $0.002 |
+| `post_detail` | One X post by URL, with its stats and author. | $0.002 |
+| `post_replies` | Replies to an X post. | $0.002 |
+| `search` | Search public X posts, users or media by keyword. | $0.002 |
+| `trending` | Trending topics on X for a country. | $0.002 |
+
+### YouTube
+
+App id: `youtube-data`. 7 actions, $0.002 to $0.02 per call.
+
+```text
+Using youtube-data, get the transcript of this video and summarize it in 5 bullets: https://www.youtube.com/watch?v=…
+List the 10 latest uploads of @mkbhd with view counts.
+Search YouTube for "MCP server tutorial" uploaded this month, sorted by popular.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `video_info` | One YouTube video or short by URL: title, description, channel, views, likes, publish date, duration. | $0.002 |
+| `video_comments` | Comments on a YouTube video. | $0.002 |
+| `channel_videos` | Recent uploads of a YouTube channel. Give the handle or the channel id. | $0.002 |
+| `channel_info` | A YouTube channel's subscriber count, video count, description and links. Give the handle, channel id or URL. | $0.002 |
+| `search_videos` | Search YouTube videos by keyword. | $0.004 |
+| `search_channels` | Search YouTube channels by keyword; returns handles and channel ids for channel_info and channel_videos. | $0.002 |
+| `video_captions` | Captions (transcript) of a YouTube video as text. | $0.02 |
+
+### LinkedIn
+
+App id: `linkedin-data`. 7 actions, $0.002 to $0.10 per call.
+
+```text
+Using linkedin-data, get the company profile of https://www.linkedin.com/company/anthropic and their 5 most recent posts.
+Summarize this LinkedIn post and its comments: https://www.linkedin.com/posts/…
+Search LinkedIn jobs for "developer advocate" posted in the past week.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `user_profile` | Public LinkedIn profile by URL: what a logged-out visitor sees (headline, location, about, follower count). LinkedIn no longer shows work history publicly. | $0.02 |
+| `user_posts` | Recent public posts of a LinkedIn member with reactions and comment counts. | $0.10 |
+| `company_profile` | Public LinkedIn company page: industry, size, headquarters, follower count, description. | $0.02 |
+| `company_posts` | Recent public posts of a LinkedIn company page. | $0.10 |
+| `post_detail` | One public LinkedIn post or article by URL: author, text, reactions, comment count. | $0.002 |
+| `post_comments` | Comments on a public LinkedIn post. | $0.10 |
+| `search_jobs` | Search public LinkedIn job listings by keyword. | $0.10 |
+
+### Spotify
+
+App id: `spotify-data`. 7 actions, $0.0038 per call.
+
+```text
+Using spotify-data, how many monthly listeners does this artist have, and what are their top tracks? https://open.spotify.com/artist/…
+List the tracks on this playlist with their play counts: https://open.spotify.com/playlist/…
+Find the latest 10 episodes of this podcast: https://open.spotify.com/show/…
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `artist` | A Spotify artist by id or URL: monthly listeners, followers, top tracks, discography. | $0.0038 |
+| `track` | A Spotify track by URL: play count, popularity, album and artists. | $0.0038 |
+| `album` | A Spotify album by URL with its track list. | $0.0038 |
+| `playlist` | A Spotify playlist by URL: follower count and tracks. | $0.0038 |
+| `search` | Search Spotify for tracks, artists, albums, playlists and podcasts. | $0.0038 |
+| `podcast` | A Spotify podcast (show) by URL. | $0.0038 |
+| `podcast_episodes` | Episodes of a Spotify podcast by URL. | $0.0038 |
+
+### Snapchat
+
+App id: `snapchat-data`. 3 actions, $0.0038 per call.
+
+```text
+Using snapchat-data, get the profile of @nba and its subscriber count.
+Pull the comments on this Spotlight video: https://www.snapchat.com/spotlight/…
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `profile` | Public Snapchat profile by handle: display name, subscriber count, bio, spotlight highlights. | $0.0038 |
+| `spotlight` | One Snapchat Spotlight video by URL with view and share counts. | $0.0038 |
+| `spotlight_comments` | Comments on a Snapchat Spotlight video. | $0.0038 |
+
+### Kick
+
+App id: `kick-data`. 1 action, $0.0038 per call.
+
+```text
+Using kick-data, get the title, streamer and view count of this clip: https://kick.com/…/clips/…
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `clip` | A Kick clip by URL: title, streamer, category, views, duration. | $0.0038 |
+
+### Twitch
+
+App id: `twitch-data`. 4 actions, $0.0038 per call.
+
+```text
+Using twitch-data, is @shroud live right now, and what is the stream schedule this week?
+List the 10 most viewed highlights of @pokimane.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `profile` | Public Twitch channel by handle: followers, description, live status, recent stream info. | $0.0038 |
+| `user_videos` | Past broadcasts, highlights and uploads of a Twitch channel. | $0.0038 |
+| `user_schedule` | A Twitch channel's stream schedule. | $0.0038 |
+| `clip` | A Twitch clip by URL: title, streamer, game, views, duration. | $0.0038 |
+
+### Pinterest
+
+App id: `pinterest-data`. 4 actions, $0.0038 per call.
+
+```text
+Using pinterest-data, search pins for "small balcony garden" and list the top 10 with their save counts.
+Show me the public boards of @marthastewart.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `search` | Search public Pinterest pins by keyword. | $0.0038 |
+| `pin` | One Pinterest pin by URL: title, description, image, board, saves. | $0.0038 |
+| `user_boards` | Public boards of a Pinterest user. | $0.0038 |
+| `board` | Pins on a public Pinterest board by URL. | $0.0038 |
+
+### Facebook
+
+App id: `facebook-data`. 9 actions, $0.0038 per call.
+
+```text
+Using facebook-data, get the last 10 posts of https://www.facebook.com/nasa and their reaction counts.
+Search the Meta Ad Library for active ads mentioning "meal kit" in the US.
+Which ads is Notion running right now, from the Meta Ad Library?
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `page_profile` | Public Facebook page or profile by URL: name, category, likes, followers, about. | $0.0038 |
+| `page_posts` | Recent public posts of a Facebook page by URL. | $0.0038 |
+| `page_reels` | Recent public reels of a Facebook page by URL. | $0.0038 |
+| `post` | One public Facebook post by URL: text, media, reactions, comment and share counts. | $0.0038 |
+| `post_comments` | Comments on a public Facebook post by URL. | $0.0038 |
+| `group_posts` | Recent posts of a public Facebook group by URL. | $0.0038 |
+| `ad_library_search` | Search the Meta Ad Library for active ads by keyword. | $0.0038 |
+| `ad_library_company_ads` | Ads a company is running, from the Meta Ad Library, by page id or company name. | $0.0038 |
+| `events_search` | Search public Facebook events by keyword. | $0.0038 |
+
+### Bluesky
+
+App id: `bluesky-data`. 3 actions, $0.0038 per call.
+
+```text
+Using bluesky-data, get the profile of jay.bsky.team and their latest posts.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `profile` | Public Bluesky profile by handle: followers, following, post count, bio. | $0.0038 |
+| `user_posts` | Recent posts of a Bluesky account by handle. | $0.0038 |
+| `post` | One Bluesky post by URL with likes, reposts and replies. | $0.0038 |
+
+### Telegram
+
+App id: `telegram-data`. 3 actions, $0.0038 per call.
+
+```text
+Using telegram-data, get the subscriber count of the @durov channel and summarize its last 10 posts.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `channel` | Public Telegram channel by handle: title, description, subscriber count. | $0.0038 |
+| `channel_posts` | Recent posts of a public Telegram channel. | $0.0038 |
+| `post` | One public Telegram channel post by URL. | $0.0038 |
+## Limits and good practice
+
+- **Public only.** These apps never see private content, and they never act on a platform. Use them for research, monitoring and reporting.
+- **Respect the platforms.** The data belongs to the people who posted it. Do not use these actions to build datasets of personal information, and follow each platform's terms for anything you publish from what you read.
+- **Loops cost money.** An agent that polls a profile every minute spends credit every minute. Ask for what you need once, and keep an eye on the balance in the sidebar.
+- **Prices in this page are current at the time of writing.** The action description your agent reads is the authoritative price.
