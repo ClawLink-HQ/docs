@@ -1,8 +1,8 @@
 name: Build
 
-# Cloudflare Pages builds and deploys the site from its own Git integration.
-# This workflow is just the pull-request check: it fails on type errors,
-# broken MDX, and anything else that would break the Cloudflare build.
+# A build check only: it fails on type errors, broken MDX, and anything else
+# that would break the site. Deploys are a manual `wrangler pages deploy`
+# (the Cloudflare Pages project has no Git connection): see README.
 
 on:
   pull_request:

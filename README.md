@@ -67,6 +67,14 @@ Mintlify components the docs were originally written with (`Note`, `Warning`,
 
 ## Deployment
 
-`npm run build` writes a fully static site to `out/`, deployable to any static
-host. The GitHub Actions workflow in `.github/workflows/` builds every pull
-request and publishes `main` to GitHub Pages.
+The site is the Cloudflare Pages project `clawlink-docs-preview` (serves
+`docs.claw-link.dev`). It is a **direct-upload** project with no Git
+connection, so pushing to `main` does not deploy. Build, then upload:
+
+```bash
+npm run build
+npx wrangler pages deploy out --project-name clawlink-docs-preview --branch main --commit-hash $(git rev-parse --short HEAD)
+```
+
+The GitHub Actions workflow in `.github/workflows/` only builds every push and
+pull request as a check.
