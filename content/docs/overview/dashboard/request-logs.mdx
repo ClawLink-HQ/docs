@@ -1,52 +1,60 @@
 ---
-title: "Usage"
-description: "Monitor every API call your agent makes"
+title: "Logs"
+description: "See every tool call your agent makes, with its input, output and errors"
 icon: "ScrollText"
 ---
 
-The product label for this page is **Usage**. It gives you a record of every tool call your agent has made through ClawLink. Use it to verify what ran, inspect failures, and understand latency.
+**Logs** records every tool call your agent makes through ClawLink. Use it to check what ran, find out why a call failed, and see how busy each app is. (Older versions of the dashboard called this page **Usage**.)
 
-## What logs show
+## The charts
 
-Each log entry represents a single API call. The logs page shows at a glance:
+<CardGroup cols={2}>
+  <Card title="Tool calls" icon="chart-line">
+    Calls over the past 7, 30 or 90 days.
+  </Card>
+  <Card title="Calls by app" icon="chart-pie">
+    Which apps your agent uses most. Failed calls are included here, but only successful calls count toward your plan.
+  </Card>
+</CardGroup>
 
-- **Total Requests** — the total number of calls recorded
-- **Success Rate** — the percentage that succeeded
-- **Avg Latency** — the average response time across all calls
+## Find a call
 
-The log table lists individual requests with all the detail you need to understand what happened.
+Narrow the list with:
 
-## Reading a log entry
+- **Search**: app names, tool names or error text.
+- **App**: one app, or **Data** for the [public data apps](/integrations/public-data).
+- **Status**: **Success** or **Error**.
+- **Time range**: the last 24 hours, 7 days, 30 days, or all time.
 
-Each row in the logs table contains the following fields:
+## Open a call
 
-| Field | Description |
+Click a row to see the details:
+
+| Field | What it tells you |
 |---|---|
-| **Integration** | The service that was called (for example, `gmail`, `slack`, `github`) |
-| **Action** | The specific operation that ran (for example, `send_email`, `create_issue`, `list_customers`) |
-| **Status** | Whether the request succeeded or failed |
-| **Latency** | How long the request took to complete, in milliseconds |
-| **Timestamp** | When the request was made |
+| **Status** | **OK** or **Failed**, with the error message if it failed |
+| **Device** | Who made the call: OpenClaw, Hermes, the CLI, a remote MCP client, or a manual key |
+| **Input** | The arguments your agent sent |
+| **Output** | What the app returned |
+| **Connection ID** | Which connected account ran the call |
+| **Provider request ID** | The app's own id for the request. Give it to the app's support if you need to |
 
-A green indicator means the request completed successfully. A red indicator means it returned an error.
-
-## Filtering logs
-
-Use the filter controls to narrow down what you see:
-
-- **Search** — type any text to filter by integration name or action
-- **Integration** — select a specific service to see only its requests
-- **Action** — filter by a specific operation
-- **Status** — show only successful requests, only errors, or all requests
+For a public data app, the row also shows the price of the call, or **Refunded** when the call failed.
 
 ## When you see errors
 
-If a request shows an error status, check the following:
-
-1. Open the **Connections** page and confirm the affected integration is still showing as **Connected**.
-2. If the integration needs attention, reconnect it by running the hosted flow again.
-3. Check that your agent is calling a valid action for that integration.
+<Steps>
+  <Step title="Read the error in the call details">
+    The message usually says what went wrong: a missing permission, a bad argument, or a rate limit.
+  </Step>
+  <Step title="Check the connection">
+    Open **Connections** and make sure the app shows **Connected**. If it shows **Needs reconnect**, reconnect it.
+  </Step>
+  <Step title="Check the action and its arguments">
+    Make sure your agent called a real action for that app, with real values, not placeholders.
+  </Step>
+</Steps>
 
 <Tip>
-  Use filters to isolate one integration or action. If you see a sudden spike in failures from one service, it usually means the connection needs to be refreshed or the provider had an outage.
+  **Confirmation needed** is not an error. The action changes data, so ClawLink asked your agent to confirm it first. Approve it in your chat and the agent tries again.
 </Tip>

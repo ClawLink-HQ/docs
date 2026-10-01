@@ -1,55 +1,61 @@
 ---
 title: "Settings"
-description: "Manage your profile, advanced API keys, and account security handoff"
+description: "Your profile, the Developer tab with API keys and MCP setup, and account security"
 icon: "Settings"
 ---
 
-The Settings page currently has three tabs: **Profile**, **API Keys**, and **Security**. Billing is a separate page in the sidebar.
+**Settings** has three tabs. Billing and Devices have their own pages in the sidebar.
+
+<CardGroup cols={3}>
+  <Card title="Profile" icon="user" href="#profile">
+    Name, avatar and dashboard language.
+  </Card>
+  <Card title="Developer" icon="terminal" href="#developer">
+    Connect an agent, and manage API keys.
+  </Card>
+  <Card title="Security" icon="shield-check" href="#security">
+    Password, email and sign-in methods.
+  </Card>
+</CardGroup>
 
 ## Profile
 
-The Profile tab shows your name, email address, and avatar.
+- **Name**: edit it and click **Save changes**.
+- **Email**: set by your sign-in provider. You cannot change it here.
+- **Avatar**: click **Change avatar** to upload a picture.
+- **Language**: the language of your dashboard.
 
-- **Name** — edit your display name and click **Save Changes** to update it.
-- **Email** — your email address is set by your login provider and cannot be changed here.
-- **Avatar** — click **Change Avatar** to upload a profile picture.
+## Developer
 
-## API keys
+The Developer tab asks **Where does your agent run?** and gives you the setup for that answer:
 
-This tab is for advanced and manual setups. Most users do not need it because browser pairing is the recommended OpenClaw setup flow.
+| Answer | What you get |
+|---|---|
+| **On my computer** | `npx -y @useclawlink/cli login`. Run it where the agent runs. It signs you in. |
+| **In ChatGPT or Claude** | A connector to paste into ChatGPT or Claude. Approve when it asks. |
+| **Any MCP client** | The MCP endpoint `https://claw-link.dev/api/mcp` (Streamable HTTP). Your client signs in with OAuth, or sends an API key as a Bearer token. |
 
-You can:
+### API keys
 
-- Create a new `cllk_live_...` key
-- Copy the raw value one time, immediately after creation
-- Review created and last-used timestamps for existing keys
-- Revoke a key you no longer trust
+Under **Manual key**, for agents that cannot run the login command, you can:
+
+- Create a `cllk_live_...` key and give it a name.
+- Copy the raw key once, right after you create it.
+- See when each key was created and last used.
+- Revoke a key you no longer trust.
 
 <Warning>
-Raw key values are never shown again after creation. If you lose one, revoke it and create a new key instead of expecting the dashboard to reveal it again.
+  A raw key shows only once. If you lose it, revoke it and create a new one.
 </Warning>
 
 <Tip>
-Building against ClawLink's HTTP API with one of these keys? See the [Developer API](/api/overview) reference for endpoints, the `confirm` field, file uploads, and curl examples.
+  Building on ClawLink's HTTP API with a key? See the [Developer API](/api/overview) for endpoints, the `confirm` field, file uploads and curl examples.
 </Tip>
 
 ## Security
 
-The Security tab is a handoff into your hosted account management flow.
-
-Use **Manage** to open the account screen for:
+**Manage** opens your account screen for:
 
 - Password and email changes
 - Connected sign-in methods
-- Any additional protections your identity provider supports
-
-ClawLink does not currently expose the old in-dashboard notifications controls described in earlier docs.
-
-## Billing lives separately
-
-Use the dedicated [Billing](/billing) page in the sidebar to:
-
-- Review your current plan
-- Upgrade to Starter or Ultra Heavy
-- Open the Polar customer portal
-- See whether the next new integration requires an upgrade
+- Any extra protection your sign-in method supports

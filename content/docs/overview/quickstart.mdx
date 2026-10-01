@@ -6,12 +6,11 @@ icon: "Rocket"
 
 <Steps>
   <Step title="Sign up at claw-link.dev">
-    Go to [claw-link.dev](https://claw-link.dev) and create your account. New accounts start with a 7-day free trial — your first app is included, no card required.
+    Go to [claw-link.dev](https://claw-link.dev) and create your account. New accounts start with a 7-day free trial. Your first app is included, and you do not need a card.
   </Step>
 
-  <Step title="Set up your client">
-    ClawLink works three ways — the agent-agnostic CLI, the Hermes plugin, or the
-    OpenClaw plugin. Pick one:
+  <Step title="Set up your agent">
+    ClawLink works three ways: the CLI for any agent, the Hermes plugin, or the OpenClaw plugin. Pick one:
 
     <SetupTabs app="your first app" />
 
@@ -19,27 +18,32 @@ icon: "Rocket"
   </Step>
 
   <Step title="Connect your first app">
-    In the ClawLink dashboard, open **Connections** and click **Add connection**. Pick the app you want and complete the hosted flow.
+    In the ClawLink dashboard, open **Connections** and click **Add connection**. Pick the app and complete the hosted flow.
 
-    - Apps that are ready today show **Connect**
-    - Other apps may show **Coming soon**
+    Good first apps, because setup is quick and the results are easy to check:
+
+    <LogoRow apps="gmail slack google-calendar notion github" labels />
   </Step>
 
-  <Step title="Start using your integrations">
-    Your agent can now act on your connected integrations. Try prompts like:
+  <Step title="Ask your agent to use it">
+    Try prompts like these:
 
-    - "Send an email to sarah@example.com with subject 'Hello'"
-    - "Post a message to #general in Slack saying the deploy is done"
-    - "Create a GitHub issue titled 'Fix login bug' in my main repo"
-    - "Add a row to my sales tracker Google Sheet"
-    - "List my last 5 Stripe customers"
+    <Prompts
+      items={[
+        ["gmail", "Send an email to sarah@example.com with subject 'Hello'"],
+        ["slack", "Post a message to #general in Slack saying the deploy is done"],
+        ["github", "Create a GitHub issue titled 'Fix login bug' in my main repo"],
+        ["google-sheets", "Add a row to my sales tracker Google Sheet"],
+        ["stripe", "List my last 5 Stripe customers"],
+      ]}
+    />
   </Step>
 </Steps>
 
 <Tip>
-  Start with the apps you use most day to day. Gmail, Slack, Google Calendar, and Notion are good first choices because the setup is quick and the results are easy to verify.
+  To check the setup, ask your agent: "Using ClawLink, list the apps I have connected." Every call then shows in **Dashboard > Logs**.
 </Tip>
 
 <Note>
-  **Settings > API Keys** still exists, but it is an advanced fallback for manual plugin settings and debugging. Browser pairing is the recommended setup path. To call ClawLink directly over HTTP with a key, see the [Developer API](/api/overview).
+  API keys in **Settings > Developer** are for agents that cannot run the login command. Browser pairing is the recommended setup. To call ClawLink directly over HTTP with a key, see the [Developer API](/api/overview).
 </Note>

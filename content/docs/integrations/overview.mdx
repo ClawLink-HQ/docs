@@ -4,61 +4,56 @@ description: "Browse the supported apps and understand how hosted connections wo
 icon: "Blocks"
 ---
 
-Integrations let your ClawLink agent connect to the tools you already use. Once you add a connection for a service, your agent gains tools for reading data, triggering actions, and moving information between services.
+ClawLink connects your agent to 1,000+ apps. When you add a connection for an app, your agent gets tools to read its data, take actions, and move information between apps.
 
-## How to connect an integration
+## How to connect an app
 
-<Steps>
-  <Step title="Open the Connections page">
-    Go to your ClawLink dashboard and select **Connections** from the sidebar.
-  </Step>
-  <Step title="Choose a service">
-    Find the app you want and click **Connect**.
-  </Step>
-  <Step title="Finish the hosted flow">
-    ClawLink opens the provider flow in a popup and creates or updates the exact connection row for that app.
-  </Step>
-  <Step title="Start using it">
-    Your agent can now use the integration immediately through OpenClaw or Hermes.
-  </Step>
-</Steps>
+<Flow
+  steps={[
+    { icon: "plug", title: "Open Connections", text: "In the dashboard sidebar." },
+    { icon: "search", title: "Pick the app", text: "Search for it and click Connect." },
+    { icon: "mouse-pointer-click", title: "Sign in", text: "Finish the app's own sign-in in the popup." },
+    { icon: "bot", title: "Use it", text: "Ask your agent. It can use the app at once." },
+  ]}
+/>
 
-## Available categories
+## Categories
 
-<CardGroup cols={2}>
-  <Card title="Communication" icon="message" href="/integrations/communication">
-    Gmail, Slack, Outlook, Discord, Microsoft Teams, and Telegram
-  </Card>
-  <Card title="Productivity" icon="calendar" href="/integrations/productivity">
-    Google Sheets, Google Calendar, Google Drive, Notion, Airtable, and Todoist
-  </Card>
-  <Card title="Developer Tools" icon="code" href="/integrations/developer-tools">
-    GitHub, GitLab, Jira, Linear, and Vercel
-  </Card>
-  <Card title="Public data apps" icon="radar" href="/integrations/public-data">
-    Read-only TikTok, Instagram, X, YouTube, LinkedIn, Spotify and more. Nothing to connect, paid per call from your credit
-  </Card>
-  <Card title="CRM & Sales" icon="users" href="/integrations/crm-sales">
-    Apollo, HubSpot, Salesforce, and Pipedrive
-  </Card>
-  <Card title="Payments & Finance" icon="credit-card" href="/integrations/payments">
-    Stripe, PayPal, QuickBooks, and Xero
-  </Card>
-  <Card title="Social Media" icon="share" href="/integrations/social-media">
-    YouTube, X, LinkedIn, Instagram, and more
-  </Card>
-</CardGroup>
+<CategoryGrid
+  items={[
+    { title: "Communication", href: "/integrations/communication", apps: "gmail slack outlook microsoft-teams discord", text: "Email, chat and messaging." },
+    { title: "Productivity", href: "/integrations/productivity", apps: "notion google-sheets google-calendar google-drive airtable", text: "Docs, sheets, calendars and tasks." },
+    { title: "Developer tools", href: "/integrations/developer-tools", apps: "github gitlab jira linear vercel", text: "Repos, issues, deploys and errors." },
+    { title: "CRM & sales", href: "/integrations/crm-sales", apps: "hubspot salesforce apollo attio zendesk", text: "Leads, deals and customer records." },
+    { title: "Payments & finance", href: "/integrations/payments", apps: "stripe quickbooks xero square brex", text: "Payments, invoices and accounting." },
+    { title: "Social media", href: "/integrations/social-media", apps: "youtube twitter linkedin instagram reddit", text: "Publish and manage your own accounts." },
+  ]}
+/>
 
-## Beyond the basics
+## Public data apps
 
-The catalog goes beyond the guides listed in this docs site. ClawLink also includes apps across categories like:
+Read public data with nothing to connect. Each call is paid from your data credit.
 
-- **Data & analytics** — Google Analytics, Mixpanel, Segment, Firecrawl
-- **Storage and databases** — Supabase, Firebase, SharePoint, Snowflake
-- **Marketing** — Mailchimp, Klaviyo, Instantly, Buffer
-- **AI and ML** — OpenAI, ElevenLabs, Perplexity, Replicate
-- **Commerce** — Shopify, WooCommerce
+<CategoryGrid
+  items={[
+    { title: "Public data apps", href: "/integrations/public-data", apps: "tiktok instagram twitter youtube reddit seo-keywords ai-visibility crypto stocks", text: "Social profiles and posts, Google rankings, AI search answers, crypto and stock prices." },
+  ]}
+/>
+
+## More apps in the catalog
+
+The categories above are the most common ones. The catalog also has:
+
+| Category | Some of the apps |
+|---|---|
+| Data & analytics | <AppLogo app="google-analytics" size={20} className="mr-1 align-middle" /> Google Analytics, <AppLogo app="posthog" size={20} className="mx-1 align-middle" /> PostHog, <AppLogo app="firecrawl" size={20} className="mx-1 align-middle" /> Firecrawl |
+| Storage & databases | <AppLogo app="supabase" size={20} className="mr-1 align-middle" /> Supabase, <AppLogo app="dropbox" size={20} className="mx-1 align-middle" /> Dropbox, <AppLogo app="box" size={20} className="mx-1 align-middle" /> Box, <AppLogo app="sharepoint" size={20} className="mx-1 align-middle" /> SharePoint |
+| Marketing | <AppLogo app="mailchimp" size={20} className="mr-1 align-middle" /> Mailchimp, <AppLogo app="instantly" size={20} className="mx-1 align-middle" /> Instantly |
+| Design | <AppLogo app="figma" size={20} className="mr-1 align-middle" /> Figma, <AppLogo app="canva" size={20} className="mx-1 align-middle" /> Canva |
+| AI & ML | <AppLogo app="openai" size={20} className="mr-1 align-middle" /> OpenAI, <AppLogo app="elevenlabs" size={20} className="mx-1 align-middle" /> ElevenLabs, <AppLogo app="perplexity-ai" size={20} className="mx-1 align-middle" /> Perplexity, <AppLogo app="replicate" size={20} className="mx-1 align-middle" /> Replicate, <AppLogo app="hugging-face" size={20} className="mx-1 align-middle" /> Hugging Face |
+
+Browse every app at [claw-link.dev/integrations](https://claw-link.dev/integrations).
 
 <Note>
-  Setup mode varies by app. The dashboard is the source of truth for whether an app is live, needs reconnect, or is still coming soon.
+  The dashboard is the source of truth for each app: whether it is live, needs a reconnect, or is still coming soon. If an app you need is missing, click **Request an app** on the Connections page.
 </Note>

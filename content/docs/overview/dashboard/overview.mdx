@@ -1,50 +1,50 @@
 ---
 title: "Dashboard overview"
-description: "What the current dashboard shows and where each workflow lives"
+description: "What the dashboard shows and where each job lives"
 icon: "LayoutDashboard"
 ---
 
-The dashboard is organized around setup, connection management, and execution visibility. It is where you install ClawLink, connect apps, inspect usage, and manage billing.
+The dashboard at [claw-link.dev/dashboard](https://claw-link.dev/dashboard) is where you install ClawLink, connect apps, see what your agent did, and manage billing.
 
-## Sidebar navigation
-
-The main sidebar is split into **Platform** and **Resources**.
-
-| Section | What it contains |
-|---|---|
-| **Platform** | **Home**, **Connections**, **Install**, **Usage**, **Request App** |
-| **Resources** | **Settings**, **Billing**, **Feedback**, **Documentation** |
-
-## Home page
-
-The home page gives you:
-
-- An install handoff for OpenClaw and Hermes
-- A searchable app grid across the full integration catalog
-- Sort and filter controls for the catalog
-- Quick paths into the rest of the dashboard
-
-## Where to go for each job
-
-- Use **Connections** to add, reconnect, expand, or remove individual connection rows.
-- Use **Install** when you want the current setup path for OpenClaw or Hermes.
-- Use **Usage** to inspect tool execution history, failures, and latency.
-- Use **Settings** for profile, advanced/manual API keys, and account security handoff.
-- Use **Billing** for plan status, upgrade, and subscription management.
-
-## Explore the dashboard
+## Sidebar
 
 <CardGroup cols={2}>
   <Card title="Connections" icon="plug" href="/dashboard/integrations">
-    Add apps, reconnect existing accounts, and remove individual connection rows
+    Your apps. Add, reconnect and remove connections, and browse the catalog.
   </Card>
-  <Card title="Install" icon="download" href="/dashboard/install">
-    Start with the current setup flow for OpenClaw or Hermes
+  <Card title="Install" icon="rocket" href="/dashboard/install">
+    The current setup command for your agent, with a copy button.
   </Card>
-  <Card title="Usage" icon="list" href="/dashboard/request-logs">
-    Monitor every tool call your agent makes
+  <Card title="Devices" icon="cpu" href="/dashboard/devices">
+    Every machine paired to your account. Rename or revoke one.
   </Card>
-  <Card title="Settings" icon="gear" href="/dashboard/settings">
-    Manage your profile, advanced API keys, and security handoff
+  <Card title="Logs" icon="scroll-text" href="/dashboard/request-logs">
+    Every tool call your agent made, with its input, output and errors.
+  </Card>
+  <Card title="Playground" icon="flask-conical" href="/dashboard/playground">
+    Try your connected apps in plain language, right in the browser.
+  </Card>
+  <Card title="Billing" icon="receipt" href="/billing">
+    Your plan, tool-call usage, data credit and invoices.
+  </Card>
+  <Card title="Settings" icon="settings" href="/dashboard/settings">
+    Profile, Developer (API keys and MCP setup) and Security.
+  </Card>
+  <Card title="Feedback" icon="message-square">
+    In the account menu. Send a bug report or an idea to the team.
   </Card>
 </CardGroup>
+
+Above the menu, the sidebar shows your **Data credit** balance. It pays for [public data apps](/integrations/public-data). Click it to top up.
+
+## Connections home
+
+**Connections** is the first page you see. It shows:
+
+- **Your connections**: the apps you have connected, each with its status.
+- **Included with ClawLink**: the public data apps every account has, with nothing to connect.
+- The full catalog, with a search box. If an app is missing, click **Request an app**.
+
+<Tip>
+  A brand-new account opens on **Install** instead, so you can set up your agent first.
+</Tip>

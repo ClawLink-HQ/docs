@@ -4,39 +4,40 @@ description: "Social media integrations for publishing, audience workflows, and 
 icon: "Share2"
 ---
 
-Connect your social accounts so your agent can publish content, manage your presence, and keep your channels active.
+Connect your own social accounts, so your agent can publish content, manage your pages and keep your channels active.
 
-## Common apps in this category
+## Apps in this category
 
-- YouTube
-- X
-- LinkedIn
-- Instagram
-- Facebook
-- Reddit
-- Spotify
+<AppGrid apps="youtube twitter linkedin instagram facebook reddit pinterest" />
 
-## Typical tasks
+## Try asking
 
-- Drafting or posting content
-- Scheduling channel updates
-- Pulling engagement or account context
-- Linking social actions to CRM or support workflows
+<Prompts
+  items={[
+    ["linkedin", "Post this announcement to my LinkedIn page"],
+    ["instagram", "Show my recent Instagram posts and their likes"],
+    ["youtube", "List my YouTube playlists"],
+    ["twitter", "Post this product update to my X account"],
+    ["reddit", "What is top in r/technology today?"],
+  ]}
+/>
 
-## Learn more about these apps
+## X is paid per call
 
-<CardGroup cols={2}>
-  <Card title="Connect LinkedIn" icon="share" href="https://claw-link.dev/hub/linkedin">
-    Create LinkedIn publishing and outreach workflows.
-  </Card>
-  <Card title="Connect Instagram" icon="share" href="https://claw-link.dev/hub/instagram">
-    Use Instagram business workflows from your agent.
-  </Card>
-  <Card title="Connect YouTube" icon="video" href="https://claw-link.dev/hub/youtube">
-    Manage channel and publishing workflows.
-  </Card>
-</CardGroup>
+X charges for every API call, so the **X** app is paid from your [data credit](/billing#data-credit), not from your plan's tool calls:
+
+| Action | Price |
+|---|---|
+| Post, reply, like, repost, follow or DM | \$0.01875 |
+| Post with a link | \$0.25 |
+| Read posts | \$0.00625 per post returned |
+
+A read is charged first for the page size your agent asks for (10 posts by default, 25 at most). ClawLink then refunds the posts X did not return.
+
+<Tip>
+  To read **other people's** public posts, profiles or trends, you do not need to connect anything. Use the [public data apps](/integrations/public-data), like TikTok, Instagram, X and Reddit public data.
+</Tip>
 
 <Note>
-  Social platforms often change scope and posting requirements. Check the guide for the app you care about, then verify the current connect flow in the dashboard before promising a workflow to users.
+  Social platforms often change their scopes and posting rules. Check the current connect flow in the dashboard before you plan a workflow around an app.
 </Note>

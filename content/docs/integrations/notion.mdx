@@ -1,119 +1,77 @@
 ---
-title: "How to Connect Notion to OpenClaw"
-description: "Step-by-step guide to connect Notion to OpenClaw. Read and write pages, query databases, and manage your workspace with AI."
+title: "How to Connect Notion to Your Agent"
+description: "Connect Notion to OpenClaw, Hermes or any agent with ClawLink. Read and write pages, query databases, and manage your workspace with AI."
+icon: "NotebookText"
 ---
 
+Connect your Notion workspace to ClawLink, and your agent can search pages, query databases, create pages and add content. Notion connects with one hosted sign-in. You do not create a Notion integration or copy a token.
 
-A complete guide to integrating Notion with OpenClaw using ClawLink. Connect your Notion workspace and let your AI agent read pages, query databases, and manage content.
+## What your agent can do
 
-## What You Can Do
+<CardGroup cols={2}>
+  <Card title="Read pages" icon="file-text">
+    Find any page you shared and read it as Markdown.
+  </Card>
+  <Card title="Query databases" icon="table">
+    Search and filter database rows, and add or update rows.
+  </Card>
+  <Card title="Create pages" icon="file-plus">
+    Add new pages under a parent page or in a database.
+  </Card>
+  <Card title="Write content" icon="pencil">
+    Append text, to-dos, code, tables and media, and add comments.
+  </Card>
+</CardGroup>
 
-Once connected, your OpenClaw agent can:
-- **Read pages** - Fetch any page content from your workspace
-- **Query databases** - Search and filter Notion databases
-- **Create pages** - Add new pages to any parent or database
-- **Update blocks** - Modify existing content in pages
-- **Create blocks** - Add new content blocks to pages
+## Set up
 
-## Prerequisites
+<SetupTabs app="Notion" />
 
-Before connecting Notion, you'll need:
-- A Notion account
-- Admin access to pages/databases you want to connect (optional - you can connect your own)
-- A ClawLink account
+When you connect Notion, Notion asks which pages ClawLink can access. Pick the pages and databases your agent needs. You can change this list later in Notion, under **Settings > Connections**.
 
-## Step 1: Create a Notion Integration
+## Try asking
 
-1. Go to [notion.so/my-integrations](https://notion.so/my-integrations)
-2. Click **+ New integration**
-3. Name it "ClawLink" or "OpenClaw"
-4. Select the capabilities you need:
-   - ✅ Read content
-   - ✅ Update content (optional)
-   - ✅ Insert content (optional)
-5. Click **Submit**
-6. Copy the **Internal Integration Token** (starts with `secret_`)
+<Prompts
+  items={[
+    ["notion", "Read my Project Tracker page and tell me the status of each active project"],
+    ["notion", "Show the tasks in my Notion database where Status is In Progress"],
+    ["notion", "Create a page in my Team Wiki called Weekly standup notes with today's date"],
+    ["notion", "Add a section to my Meeting Notes page with the summary of our last call"],
+  ]}
+/>
 
-<Note>
-Keep this token secure! Anyone with access can manage your Notion pages.
-</Note>
+## Common actions
 
-## Step 2: Connect Notion to ClawLink
+| Action | What it does |
+|---|---|
+| `search_notion_page` | Find pages and databases by title |
+| `get_page_markdown` | Read a page as Markdown |
+| `query_database` | List the rows of a database, with filters and sorting |
+| `create_notion_page` | Create a page under a parent page |
+| `insert_row_database` | Add a row to a database |
+| `append_text_blocks` | Add paragraphs, headings and lists to a page |
+| `update_page` | Change a page's title or properties |
+| `create_comment` | Comment on a page |
 
-1. Go to your ClawLink dashboard
-2. Navigate to **Integrations**
-3. Find **Notion** and click **Connect**
-4. Paste your Notion Integration Token
-5. Click **Save**
-
-## Step 3: Grant Page Access
-
-Your integration needs permission to access each page:
-
-1. Open the Notion page you want to connect
-2. Click the **•••** menu (top right)
-3. Select **Connect to**
-4. Choose your ClawLink integration
-
-Repeat for each page or database.
-
-## Example Usage
-
-Here are common prompts you can give your OpenClaw agent:
-
-### Read Pages
-> "Read my Project Tracker page and tell me the status of all active projects."
-
-### Query Databases
-> "Show me all tasks in my Notion database where status is 'In Progress'."
-
-### Create Pages
-> "Create a new page in my Team Wiki called 'Weekly Standup Notes' and add today's date."
-
-### Update Content
-> "Add a new section to my Meeting Notes page with the summary from our last call."
-
-## API Reference
-
-ClawLink provides these functions:
-
-| Function | Description |
-|----------|-------------|
-| `notion_read_page` | Read a page's content by ID |
-| `notion_query_database` | Query a database with filters |
-| `notion_create_page` | Create a new page |
-| `notion_append_blocks` | Add blocks to a page |
-| `notion_update_block` | Update a block |
+Ask your agent "Using ClawLink, list the Notion actions" to see all 50+ of them.
 
 ## Troubleshooting
 
-### "Connection failed"
-- Make sure you copied the **full token** (starts with `secret_`)
-- Verify the integration is created at [notion.so/my-integrations](https://notion.so/my-integrations)
+### A page is not found
 
-### "Page not accessible"
-- Open the page in Notion
-- Click **•••** → **Connect to** → Select your integration
+ClawLink can see only the pages you shared when you connected. In Notion, open the page, click **•••** > **Connections**, and add ClawLink. Or reconnect Notion in the dashboard and pick the page.
 
-### "Permission denied"
-- Check that your integration has the right capabilities
-- Make sure you've shared the page with the integration
+### Permission denied
 
-## Security
+The Notion account you connected cannot edit that page. Ask the page owner for edit access, or connect a different account.
 
-Your Notion credentials are:
-- Encrypted at rest (AES-256-GCM)
-- Never stored in plain text
-- Only decrypted at request time
+### The connection shows "Needs reconnect"
 
-## Related Guides
+Open **Dashboard > Connections**, open Notion and click **Reconnect**.
 
-- [Communication integrations](/integrations/communication)
-- [Developer tools integrations](/integrations/developer-tools)
+## Related
+
+- [Productivity integrations](/integrations/productivity)
 - [All integrations](/integrations/overview)
-
-## Need Help?
-
-- Check our [Troubleshooting](/troubleshooting) guide
-- Join the [Discord community](https://discord.gg/KjN3xcTvw4)
-- Open an issue if you find a bug
+- [Troubleshooting](/troubleshooting)
+- Questions? Open the support chat in the dashboard, or join the [Discord community](https://discord.gg/KjN3xcTvw4).

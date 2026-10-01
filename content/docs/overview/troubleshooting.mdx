@@ -5,94 +5,86 @@ icon: "Wrench"
 ---
 
 <Tip>
-  Start every debugging session with **Usage**. Open the logs to see exactly which integration was called, what action was attempted, and any error message returned. Most issues can be diagnosed in under a minute from the logs alone.
+  Start every debugging session in **Dashboard > Logs**. Open the failed call to see the app, the action, the input your agent sent and the error the app returned. Most problems are clear from that one screen.
 </Tip>
 
 ## Start here
 
-When something breaks, sort it into one of these buckets first:
+Find the bucket your problem is in first:
 
-- **Setup and pairing**: install, browser approval, missing tools, stale sessions
-- **Connections**: reconnect flows, expired provider auth, missing permissions
-- **Execution**: the agent called a tool but the result failed or never returned
-- **Routing**: the right bot is online, but the wrong session or channel is receiving traffic
+<CardGroup cols={2}>
+  <Card title="Setup and pairing" icon="link" href="#pairing-link-expired-or-approval-did-not-finish">
+    Install, browser approval, missing tools, stale sessions.
+  </Card>
+  <Card title="Connections" icon="plug" href="#connection-shows-needs-reconnect">
+    Reconnect flows, expired sign-ins, missing permissions.
+  </Card>
+  <Card title="Execution" icon="circle-x" href="#tool-calls-are-failing">
+    The agent called a tool, but the call failed.
+  </Card>
+  <Card title="Limits" icon="gauge" href="#rate-limit-or-quota-errors">
+    Rate limits, the monthly tool-call limit, or no data credit.
+  </Card>
+</CardGroup>
 
 ## Common fixes
 
-<AccordionGroup>
-  <Accordion title="Connection shows 'Needs reconnect'">
-    A **Needs reconnect** status usually means the provider credential expired, was revoked, or needs fresh consent.
+### Connection shows "Needs reconnect"
 
-    Go to **Connections**, expand the row, and run **Reconnect**. Then retry the same task from your agent.
-  </Accordion>
+The provider credential expired, was revoked, or needs new consent. Go to **Connections**, open the connection and click **Reconnect**. Then ask your agent to try the same task again.
 
-  <Accordion title="ClawLink tools are missing in OpenClaw">
-    The most common causes are a stale chat session after install, or a client that has not reloaded the ClawLink plugin. **To fix this:**
+Google apps (Gmail, Sheets, Calendar) and other OAuth apps can stop working this way when a token expires. Reconnecting runs the sign-in again and gets a new token.
 
-    - Start a **fresh chat** after installing the plugin so it picks up the new tool catalog.
-    - Restart the client (for OpenClaw, `openclaw gateway restart`) so the plugin reloads.
-    - Confirm the device is paired and your apps show as connected in **Dashboard > Connections**.
-    - Still missing? Check **Usage** for failed calls, or re-run browser pairing from **Settings > API Keys**.
-  </Accordion>
+### ClawLink tools are missing in your agent
 
-  <Accordion title="API calls are failing">
-    Open **Usage** and inspect the failed request first. The log tells you which integration ran, which action was attempted, and whether the problem is likely connection-related or provider-side.
+The usual cause is a chat that started before the install, or an agent that has not reloaded the plugin.
 
-    Common causes include invalid parameters, expired auth, missing scopes, or a temporary provider outage.
-  </Accordion>
+- Start a **new chat** after you install the plugin, so the agent loads the new tools.
+- Restart the agent. For OpenClaw: `openclaw gateway restart`.
+- Make sure the device shows in **Dashboard > Devices**, and your apps show **Connected** in **Connections**.
+- Still missing? Pair the device again: see [Install ClawLink](/install).
 
-  <Accordion title="Pairing link expired or approval did not finish">
-    Pairing links are short lived. If the browser page says the session expired, or OpenClaw never finishes after you approved it, start a fresh pairing flow.
+### Tool calls are failing
 
-    **To fix this:**
+Open the failed call in **Logs**. It shows which app ran, which action, the input your agent sent, and the error.
 
-    <Steps>
-      <Step title="Start pairing again from OpenClaw">
-        Ask OpenClaw to set up ClawLink or start pairing again.
-      </Step>
-      <Step title="Approve the new browser URL">
-        Open the new pairing URL, sign in if needed, and click **Approve this device**.
-      </Step>
-      <Step title="Return to OpenClaw">
-        After approval, go back to OpenClaw so the plugin can finish the local save step.
-      </Step>
-    </Steps>
-  </Accordion>
+Common causes:
 
-  <Accordion title="Rate limit errors">
-    Rate limit errors usually come from the provider, not ClawLink. ClawLink retries transient failures automatically, but repeated bursts can still fail if the provider account limit is too low for the workflow.
+- **A placeholder value.** The agent sent `YOUR_ID` or `example.com` instead of a real id. Ask it to look the id up first.
+- **A missing permission.** The connected account cannot do this action. Reconnect with an account that can.
+- **An expired sign-in.** The connection needs a reconnect.
+- **A short provider outage.** Try again in a few minutes.
 
-    Slow down the workflow or reduce how often the agent triggers that provider.
-  </Accordion>
+### Pairing link expired or approval did not finish
 
-  <Accordion title="OAuth token expired (Gmail, Google Sheets, etc.)">
-    Some integrations—including Gmail, Google Sheets, and Google Calendar—use OAuth tokens that expire over time. When a token expires, the integration will stop working until you refresh it.
+Pairing links are short-lived. If the browser page says the session expired, or your agent never finishes after you approve, start again:
 
-    **To fix this:**
+<Steps>
+  <Step title="Start pairing again">
+    Ask your agent to set up ClawLink, or run `npx -y @useclawlink/cli login` again.
+  </Step>
+  <Step title="Approve the new link">
+    Open the new link, sign in if necessary, and click **Approve this device**.
+  </Step>
+  <Step title="Go back to your agent">
+    The agent finishes the local save step and confirms that it is paired.
+  </Step>
+</Steps>
 
-    <Steps>
-      <Step title="Go to Dashboard > Connections">
-        Open your dashboard and navigate to **Connections**.
-      </Step>
-      <Step title="Reconnect to get a fresh token">
-        Expand the affected row and click **Reconnect**. This runs the hosted provider flow again and refreshes the token.
-      </Step>
-    </Steps>
-  </Accordion>
+### Rate limit or quota errors
 
-  <Accordion title="Manual API key setup is not working">
-    Manual key entry is a fallback path. If it fails, the simplest fix is usually to switch back to browser pairing.
+- **Rate limited**: the app limits how fast you can call it. ClawLink retries short bursts, but a loop that calls too often still fails. Slow the workflow down.
+- **Monthly limit reached**: you used all your tool calls for this period. See your usage in **Dashboard > Billing**, or move to Ultra Heavy.
+- **Out of data credit**: a [public data app](/integrations/public-data) call needs credit. Top up in **Dashboard > Billing**.
 
-    **Check the following:**
+### Manual API key setup does not work
 
-    - Make sure the key starts with `cllk_live_...`
-    - Confirm you copied the raw key when it was first shown after creation
-    - Revoke old keys you no longer trust and create a fresh one if needed
-    - If possible, remove the manual key and run browser pairing instead
-  </Accordion>
+A manual key is a fallback. Browser pairing is usually the simplest fix.
 
-</AccordionGroup>
+- Make sure the key starts with `cllk_live_`.
+- Make sure you copied the full raw key when it first showed.
+- Revoke old keys you no longer trust, and create a new one in **Settings > Developer**.
 
-## Deep-dive articles
+## Still stuck?
 
-For narrower client-side issues (OpenClaw gateway behavior, session routing, token usage), see the official OpenClaw documentation. For anything between your agent and ClawLink — connections, pairing, execution failures — start in **Usage** and work through the common fixes above.
+Open the support chat in the dashboard. A real person replies, usually within minutes. Include the time of the failed call, or its details from **Logs**.

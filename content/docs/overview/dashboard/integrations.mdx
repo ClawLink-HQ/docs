@@ -1,61 +1,40 @@
 ---
 title: "Connections"
-description: "Add, inspect, reconnect, and remove connection rows for each app"
+description: "Add, check, reconnect and remove connections for each app"
 icon: "Plug"
 ---
 
-The page route is still `/dashboard/integrations`, but the current product language is **Connections**. This page is where you authorize ClawLink to act on your behalf in third-party services and where you manage the exact connection rows attached to your account.
-
-You can have multiple connections for the same provider. Each row has its own stable connection id, and one row can be marked as the default connection for that provider.
+**Connections** is where you let ClawLink act for you in other apps, and where you manage each connected account. You can connect more than one account of the same app. Each account is its own connection, with its own stable id, and one of them is the **default** for that app.
 
 ## Add a connection
 
-<Steps>
-  <Step title="Open Connections">
-    In the dashboard sidebar, select **Connections**.
-  </Step>
-  <Step title="Click Add connection">
-    This opens the side sheet with the searchable app list.
-  </Step>
-  <Step title="Pick the app">
-    Search for the app you want. Apps that are ready today show **Connect**. Others may show **Coming soon**.
-  </Step>
-  <Step title="Finish the hosted flow">
-    ClawLink opens a popup for the provider flow. When it succeeds, the connection row appears on the page.
-  </Step>
-  <Step title="Use it from OpenClaw">
-    Once the row is connected, OpenClaw can discover tools for that app through the ClawLink plugin.
-  </Step>
-</Steps>
+<Flow
+  steps={[
+    { icon: "plus", title: "Add connection", text: "Open Connections and click Add connection." },
+    { icon: "search", title: "Pick the app", text: "Search the catalog. Live apps show Connect." },
+    { icon: "mouse-pointer-click", title: "Sign in", text: "Finish the app's own sign-in in the popup." },
+    { icon: "circle-check", title: "Ready", text: "The connection shows as Connected. Your agent can use it now." },
+  ]}
+/>
 
-## What each row shows
-
-Each connection row can show:
-
-- The provider name and icon
-- Whether the row is the **Default** connection for that provider
-- A **Connected** or **Needs reconnect** badge
-- Expandable actions like **Reconnect** and **Remove**
-- An optional list of available actions for that provider
-
-## Multiple connections per provider
-
-ClawLink no longer assumes one row per provider.
-
-That means:
-
-- You can connect more than one account for the same provider
-- One row is marked as the default connection when ClawLink needs to choose automatically
-- Removing one row removes only that exact connection, not every row for the provider
+To add a second account of an app you already use, open that app and click **Connect another account**.
 
 ## Connection statuses
 
-| Status | Meaning | What to do |
+| Status | What it means | What to do |
 |---|---|---|
-| **Connected** | The integration is authorized and working | Nothing — it's ready to use |
-| **Needs reconnect** | The credentials are invalid, expired, or need new consent | Expand the row and click **Reconnect** |
-| **Coming soon** | The app is listed but not ready for hosted setup yet | Wait for the hosted flow to ship or request the app |
+| **Connected** | The app is authorized and working | Nothing. It is ready to use |
+| **Needs reconnect** | The credential expired, was revoked, or needs new consent | Open the connection and click **Reconnect** |
+| **Coming soon** | The app is in the catalog, but its connect flow is not live yet | Use **Request an app** to show interest |
+| **Included** | A [public data app](/integrations/public-data). Nothing to connect | Use it. Each call is paid from your data credit |
 
 <Warning>
-If a provider token expires, ClawLink keeps the row but marks it as needing reconnect. Tool calls for that app will fail until you reconnect the account.
+  When a provider token expires, ClawLink keeps the connection but marks it **Needs reconnect**. Tool calls to that app fail until you reconnect.
 </Warning>
+
+## More than one account per app
+
+- Connect as many accounts of the same app as you need, for example a work and a personal Gmail.
+- One connection is the default. ClawLink uses it when the request does not name a connection.
+- Removing a connection removes only that account, never the other accounts of the app.
+

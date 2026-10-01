@@ -4,39 +4,24 @@ description: "Developer and ops integrations for repositories, issues, deploymen
 icon: "Code"
 ---
 
-Connect your development workflow to ClawLink so your agent can manage repos, track issues, and inspect delivery systems without you switching context.
+Connect your development tools, so your agent can manage repos, track issues and check deployments without you switching context.
 
-## Common apps in this category
+## Apps in this category
 
-- GitHub
-- GitLab
-- Jira
-- Linear
-- Vercel
-- Sentry
-- Grafana
-- Datadog
-- Cloudflare
+<AppGrid apps="github gitlab jira linear vercel sentry cloudflare supabase posthog" />
 
-## Typical tasks
+## Try asking
 
-- Creating issues and pull requests
-- Reading repository state
-- Tracking deployments
-- Investigating incidents and errors
-- Updating project management systems
-
-## Learn more about these apps
-
-<CardGroup cols={2}>
-  <Card title="Connect GitHub" icon="code" href="https://claw-link.dev/hub/github">
-    Create issues, inspect repos, and work with pull requests.
-  </Card>
-  <Card title="Connect Linear" icon="code" href="https://claw-link.dev/hub/linear">
-    Create and manage issues, cycles, and projects.
-  </Card>
-</CardGroup>
+<Prompts
+  items={[
+    ["github", "Show my open pull requests and which ones wait for my review"],
+    ["linear", "What issues are assigned to me this cycle?"],
+    ["sentry", "List the new errors in production since yesterday"],
+    ["vercel", "Did the last production deployment succeed?"],
+    ["jira", "Create a bug ticket for the failing checkout test"],
+  ]}
+/>
 
 <Note>
-  The exact tool surface depends on the provider and the connection type. Use **Connections** to see what is live in your account today.
+  The tools available depend on the app and on the permissions of the account you connect. Use **Connections** to see what is live in your account today.
 </Note>

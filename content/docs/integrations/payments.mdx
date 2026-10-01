@@ -4,28 +4,23 @@ description: "Payments and finance integrations for customers, invoices, account
 icon: "CreditCard"
 ---
 
-Connect your payment and accounting tools so your agent can manage transactions, generate invoices, and track financial data.
+Connect your payment and accounting tools, so your agent can look up transactions, follow up on invoices and keep finance records in sync.
+
+## Apps in this category
+
+<AppGrid apps="stripe quickbooks xero square brex" />
+
+## Try asking
+
+<Prompts
+  items={[
+    ["stripe", "List the failed payments from this week and the customers they belong to"],
+    ["quickbooks", "Which invoices are overdue by more than 30 days?"],
+    ["xero", "Create a draft invoice for Acme Ltd for 10 hours of consulting"],
+    ["square", "What were our total sales yesterday?"],
+  ]}
+/>
 
 <Warning>
-  Keep your payment API keys secure. Never share them publicly or commit them to source control. ClawLink encrypts and stores your credentials securely, but you should rotate any key that you suspect has been compromised immediately.
+  Finance apps can move money. ClawLink asks your agent to confirm any action that changes data before it runs. Connect with the narrowest permissions your workflow needs, and reconnect at once if you think a credential was exposed.
 </Warning>
-
-## Common apps in this category
-
-- Stripe
-- PayPal
-- QuickBooks
-- Xero
-- Square
-- Razorpay
-
-## Typical tasks
-
-- Looking up customers and invoices
-- Investigating failed payments
-- Syncing finance records into other systems
-- Creating follow-up tasks from billing events
-
-<Note>
-  For finance systems, use the narrowest permissions your workflow needs and reconnect immediately if you suspect a credential was exposed.
-</Note>

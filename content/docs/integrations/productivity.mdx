@@ -4,45 +4,24 @@ description: "Productivity integrations for docs, calendars, files, tasks, and i
 icon: "CalendarCheck"
 ---
 
-Give your agent access to the tools you use to stay organized.
+Give your agent access to the docs, sheets, calendars and task lists you use to stay organized.
 
-## Common apps in this category
+## Apps in this category
 
-- Google Sheets
-- Google Calendar
-- Google Drive
-- Notion
-- Airtable
-- Todoist
-- Google Docs
-- Trello
-- Asana
+<AppGrid apps="notion google-sheets google-calendar google-drive google-docs airtable todoist trello asana clickup monday calendly" />
 
-## Typical tasks
+## Try asking
 
-- Updating spreadsheets and trackers
-- Creating meetings and managing calendars
-- Searching Drive or Notion content
-- Writing documents and storing files
-- Creating tasks and project updates
-
-## Learn more about these apps
-
-<CardGroup cols={2}>
-  <Card title="Connect Notion" icon="book" href="https://claw-link.dev/hub/notion">
-    Search and update pages, docs, and databases.
-  </Card>
-  <Card title="Connect Airtable" icon="table" href="https://claw-link.dev/hub/airtable">
-    Work with records and structured tables.
-  </Card>
-  <Card title="Connect Google Calendar" icon="calendar" href="https://claw-link.dev/hub/google-calendar">
-    Create and manage calendar events.
-  </Card>
-  <Card title="Connect Google Sheets" icon="table" href="https://claw-link.dev/hub/google-sheets">
-    Read and write spreadsheet data.
-  </Card>
-</CardGroup>
+<Prompts
+  items={[
+    ["google-sheets", "Add today's new signups as rows in my growth tracker sheet"],
+    ["google-calendar", "Find a free hour with no meetings this Thursday and block it for focus"],
+    ["notion", "Create a page in my team wiki called Weekly standup notes"],
+    ["google-drive", "List the files in my Drive that changed this week"],
+    ["todoist", "What tasks are due today?"],
+  ]}
+/>
 
 <Note>
-  Some apps use hosted OAuth flows today, while others may have different connection requirements. The dashboard is the source of truth for the current setup state.
+  Most apps here connect with one sign-in. The dashboard is the source of truth for the setup of each app.
 </Note>

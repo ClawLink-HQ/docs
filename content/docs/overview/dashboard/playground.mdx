@@ -1,0 +1,41 @@
+---
+title: "Playground"
+description: "Try your connected apps in plain language, right in the dashboard"
+icon: "FlaskConical"
+---
+
+The **Playground** lets you try your connected apps in plain language, in the browser. You do not need an agent, a setup or any code. It is a quick way to check that a connection works, or to see what an app can do.
+
+## How to use it
+
+<Steps>
+  <Step title="Connect an app">
+    The Playground runs real tasks on the apps you have connected. Connect one first in **Connections**.
+  </Step>
+  <Step title="Mention the app and ask">
+    Type `@` to pick an app, then say what you want. For example: `@gmail summarize my unread email`.
+  </Step>
+  <Step title="Approve changes">
+    Before anything that changes data, like sending an email or creating an issue, the Playground asks **Approve this action?** Nothing runs on your real account until you approve.
+  </Step>
+</Steps>
+
+## Things to try
+
+These are the Playground's own suggestions. Mention the app first.
+
+<Prompts
+  items={[
+    ["gmail", "Summarize my unread email"],
+    ["google-calendar", "What's on my calendar this week?"],
+    ["github", "Show my open pull requests"],
+    ["notion", "List my Notion pages"],
+    ["stripe", "Show my recent payments"],
+  ]}
+/>
+
+Each answer has a **What it did** list, so you can see every tool call it made. Your chats are kept under **Chats**, and **New chat** starts over.
+
+<Note>
+  The Playground has its own limit per plan, separate from your monthly tool calls. If you send messages too quickly, wait a moment and try again.
+</Note>

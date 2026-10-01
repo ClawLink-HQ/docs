@@ -5,9 +5,17 @@ icon: "Code"
 ---
 
 The ClawLink Developer API lets you run actions on your connected apps (Gmail, Slack,
-Instagram, Notion, and 80+ more) with plain HTTP requests. It is the same execution
-runtime the OpenClaw plugin and the MCP/CLI surfaces call — so anything an agent can do
+Instagram, Notion and 1,000+ more) with plain HTTP requests. It is the same execution
+runtime the OpenClaw plugin and the MCP and CLI surfaces call, so anything an agent can do
 through ClawLink, you can do directly with `curl` or any HTTP client.
+
+<Flow
+  steps={[
+    { icon: "terminal", title: "Your code", text: "POST /api/executions with a cllk_live_ key." },
+    { icon: "link", title: "ClawLink", text: "Checks the key, picks your connection, signs the call." },
+    { icon: "blocks", title: "The app", text: "Runs the action. You get one normalized result." },
+  ]}
+/>
 
 **Base URL**
 

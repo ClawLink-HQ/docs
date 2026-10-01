@@ -4,11 +4,18 @@ description: "Connect Hermes to ClawLink, approve pairing, and start using hoste
 icon: "Sparkles"
 ---
 
-ClawLink also works with Hermes. The flow is the same at a high level: install the ClawLink plugin, approve the browser pairing flow, then connect the apps you want from the dashboard.
+ClawLink works with Hermes through the ClawLink plugin. Install the plugin, approve the device in your browser, then connect the apps you want from the dashboard.
+
+<Flow
+  steps={[
+    { icon: "hermes", title: "Install", text: "Add the ClawLink plugin to Hermes." },
+    { icon: "link", title: "Pair", text: "hermes clawlink begin prints a link." },
+    { icon: "circle-check", title: "Approve", text: "Open the link, approve, then run finish and test." },
+    { icon: "plug", title: "Connect apps", text: "Add apps in Dashboard > Connections and use them in chat." },
+  ]}
+/>
 
 ## Set up ClawLink for Hermes
-
-Install the plugin, pair the device, then connect apps:
 
 <Steps>
   <Step title="Install the plugin">
@@ -35,38 +42,40 @@ Install the plugin, pair the device, then connect apps:
     hermes clawlink test
     ```
 
-    `test` confirms ClawLink is ready.
+    `test` confirms that ClawLink is ready.
   </Step>
 
   <Step title="Connect your first app">
-    In **Dashboard > Connections**, click **Add connection** and complete the hosted flow for Gmail, Slack, Notion, Stripe, or any other app you want Hermes to use.
+    In **Dashboard > Connections**, click **Add connection** and complete the hosted flow for the app you want Hermes to use.
   </Step>
 
   <Step title="Ask Hermes to use the connected app">
-    Once the connection is ready, Hermes can call the app tools directly from chat.
+    When the connection is ready, Hermes can call the app's tools directly from chat.
   </Step>
 </Steps>
 
 <Tip>
-  You can also hand the whole flow to Hermes as one prompt — **Dashboard > Install**
-  has a copyable version. Not using Hermes? See [Install ClawLink](/install) for the
-  agent-agnostic CLI and the OpenClaw plugin.
+  You can also give the whole flow to Hermes as one prompt. **Dashboard > Install** has a version you can copy. Not using Hermes? See [Install ClawLink](/install) for the CLI and the OpenClaw plugin.
 </Tip>
 
 ## Good first tasks
 
-- Draft and send Gmail replies
-- Create or update calendar events
-- Search Notion pages and databases
-- Create GitHub issues
-- Pull customer data from Stripe or HubSpot
+<Prompts
+  items={[
+    ["gmail", "Draft a reply to the last email from Sarah and send it"],
+    ["google-calendar", "Add a 30-minute call with the design team tomorrow at 10:00"],
+    ["notion", "Search my Notion workspace for the Q3 roadmap page"],
+    ["github", "Create an issue in my main repo for the failing login test"],
+    ["hubspot", "Pull the latest deals from HubSpot and summarize them"],
+  ]}
+/>
 
 ## Notes
 
-- If the plugin was just installed and Hermes cannot see the ClawLink tools yet, restart the session and retry the setup prompt.
-- Browser pairing is the preferred flow. You should not need to move raw provider credentials through chat.
-- Your connected apps live on your ClawLink account, so you can reuse them across supported agent clients.
+- If you just installed the plugin and Hermes cannot see the ClawLink tools, restart the session and try again.
+- Browser pairing is the recommended flow. You do not need to move provider credentials through chat.
+- Your connected apps belong to your ClawLink account, so every agent you pair can use them.
 
 <Note>
-  The dashboard install prompt is the source of truth for the exact Hermes bootstrap steps because it is updated alongside the product.
+  The install prompt in **Dashboard > Install** is the source of truth for the exact Hermes steps, because it changes together with the product.
 </Note>

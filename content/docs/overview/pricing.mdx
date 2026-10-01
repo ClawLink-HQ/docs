@@ -4,47 +4,36 @@ description: "Simple pricing for ClawLink"
 icon: "Tag"
 ---
 
-**Start with a 7-day free trial — your first app included, no card required. Continue on Starter or Ultra Heavy when you're ready.**
+Start with a **7-day free trial**: your first app is included, and you do not need a card. Continue on Starter or Ultra Heavy when you are ready.
 
-<CardGroup cols={3}>
-  <Card title="Free trial" icon="sparkles">
-    **\$0 for 7 days**
-
-    - First app included
-    - No credit card to start
-    - 1,000 tool calls over the trial
-  </Card>
-
-  <Card title="Starter" icon="rocket">
-    **\$6/mo**
-
-    - Every integration unlocked
-    - 1,000 tool calls / month
-    - Cancel anytime
-  </Card>
-
-  <Card title="Ultra Heavy" icon="infinity">
-    **\$30/month**
-
-    - 100,000 tool calls / month
-    - Built for high-volume agent workflows
-    - Cancel anytime
-  </Card>
-</CardGroup>
+<Plans />
 
 ## How it works
 
-1. Sign up and use ClawLink free for 7 days. Your first app is included — no card required.
-2. Connecting a second app during the trial starts checkout; billing begins only after your trial ends.
-3. After the trial, pick **Starter** or **Ultra Heavy** to keep your integrations active. Upgrade anytime from the dashboard.
+<Flow
+  steps={[
+    { icon: "sparkles", title: "Try it free", text: "7 days, your first app included, no card." },
+    { icon: "plug", title: "Add a second app", text: "This starts checkout. You pay only after the trial ends." },
+    { icon: "rocket", title: "Pick a plan", text: "Starter or Ultra Heavy keeps your apps active." },
+  ]}
+/>
 
 <Note>
-  Upgrade and manage your subscription from **Dashboard > Billing**. Payments are handled by Polar.
+  Upgrade and manage your subscription in **Dashboard > Billing**. Payments are handled by Polar.
 </Note>
 
-## Fair-use tool calls
+## Tool calls
 
-- **Trial** and **Starter** include 1,000 successful tool executions per period (Starter resets each calendar month).
-- **Ultra Heavy** includes 100,000 successful tool executions per calendar month.
+| Plan | Successful tool calls |
+|---|---|
+| Free trial | 1,000 over the 7 days |
+| Starter | 1,000 per calendar month |
+| Ultra Heavy | 100,000 per calendar month |
 
-Tool-call usage is visible in **Dashboard > Billing** so you always know where you stand.
+Only successful calls count. You can see your usage at any time in **Dashboard > Billing**.
+
+## Data credit
+
+[Public data apps](/integrations/public-data) (TikTok, Reddit, SEO, crypto, stocks and more) are paid per call from a separate data credit, not from your tool calls. Starter includes $1 and Ultra Heavy includes $5 of data credit every month. You can top up with a $20, $50 or $100 pack.
+
+See [Billing](/billing) for the details.

@@ -4,49 +4,60 @@ description: "What ClawLink is and why you'd use it"
 icon: "BookOpen"
 ---
 
-ClawLink is a hosted integration platform and connection layer for OpenClaw, Hermes, and similar agent workflows. It gives your agent one place to connect real apps without making you build provider auth flows, token refresh logic, and request plumbing yourself.
+ClawLink is a hosted integration layer for AI agents. It gives your agent one place to connect real apps, so you do not build provider sign-in flows, token refresh logic and request plumbing yourself.
+
+<Flow
+  steps={[
+    { icon: "bot", title: "Your agent", text: "OpenClaw, Hermes, Claude Code, Codex, Cursor or any MCP client." },
+    { icon: "link", title: "ClawLink", text: "Finds the right connection, signs the request and logs it." },
+    { icon: "blocks", title: "Your apps", text: "Gmail, Slack, GitHub, Notion, Stripe and 1,000+ more." },
+  ]}
+/>
 
 ## Why use ClawLink
 
-- **Hosted connect flows** — connect apps from the dashboard instead of hand-building provider auth setup.
-- **Browser pairing** — pair an OpenClaw or Hermes client once and keep provider credentials off the client machine.
-- **Managed credentials** — ClawLink stores provider credentials encrypted at rest and uses them only for authorized execution.
-- **Usage logs** — every tool call records status, latency, integration, and action so you can debug what actually happened.
-- **Built-in reliability** — retries, rate-limit handling, and connection-aware routing are built in.
-- **Simple pricing** — new accounts start with a 7-day free trial (first app included, no card), then **Starter** (\$6/mo) or **Ultra Heavy** (\$30/mo, 100,000 tool calls a month).
+<CardGroup cols={3}>
+  <Card title="Hosted connect flows" icon="mouse-pointer-click">
+    Connect apps from the dashboard. You never build an OAuth flow.
+  </Card>
+  <Card title="Browser pairing" icon="smartphone">
+    Pair your agent once. Provider credentials never touch its machine.
+  </Card>
+  <Card title="Managed credentials" icon="lock">
+    Credentials are encrypted at rest and used only for your requests.
+  </Card>
+  <Card title="Request logs" icon="scroll-text">
+    Every tool call records status, latency, app and action.
+  </Card>
+  <Card title="Built-in reliability" icon="refresh-cw">
+    Retries, rate-limit handling and connection-aware routing.
+  </Card>
+  <Card title="Simple pricing" icon="tag" href="/pricing">
+    7-day free trial, then Starter (\$6/mo) or Ultra Heavy (\$30/mo).
+  </Card>
+</CardGroup>
 
 ## Supported integrations
 
-<CardGroup cols={2}>
-  <Card title="Communication" icon="message" href="/integrations/communication">
-    Gmail, Slack, Outlook, Discord, Telegram, Microsoft Teams
-  </Card>
-  <Card title="Productivity" icon="calendar" href="/integrations/productivity">
-    Google Sheets, Google Calendar, Google Drive, Notion, Airtable, Todoist
-  </Card>
-  <Card title="Developer Tools" icon="code" href="/integrations/developer-tools">
-    GitHub, GitLab, Jira, Linear, Vercel
-  </Card>
-  <Card title="CRM & Sales" icon="users" href="/integrations/crm-sales">
-    Apollo, HubSpot, Salesforce, Pipedrive
-  </Card>
-  <Card title="Payments & Finance" icon="credit-card" href="/integrations/payments">
-    Stripe, PayPal, QuickBooks, Xero
-  </Card>
-  <Card title="Social Media" icon="share" href="/integrations/social-media">
-    YouTube, X, LinkedIn, Instagram, Reddit
-  </Card>
-  <Card title="All Integrations" icon="grid" href="/integrations/overview">
-    Browse the current catalog and the most common setup guides.
-  </Card>
-</CardGroup>
+<CategoryGrid
+  items={[
+    { title: "Communication", href: "/integrations/communication", apps: "gmail slack outlook microsoft-teams discord", text: "Email, chat and messaging." },
+    { title: "Productivity", href: "/integrations/productivity", apps: "notion google-sheets google-calendar google-drive airtable", text: "Docs, sheets, calendars and tasks." },
+    { title: "Developer tools", href: "/integrations/developer-tools", apps: "github gitlab jira linear vercel", text: "Repos, issues, deploys and errors." },
+    { title: "CRM & sales", href: "/integrations/crm-sales", apps: "hubspot salesforce apollo attio zendesk", text: "Leads, deals and customer records." },
+    { title: "Payments & finance", href: "/integrations/payments", apps: "stripe quickbooks xero square brex", text: "Payments, invoices and accounting." },
+    { title: "Social media", href: "/integrations/social-media", apps: "youtube twitter linkedin instagram reddit", text: "Publish and manage your own accounts." },
+    { title: "Public data apps", href: "/integrations/public-data", apps: "tiktok instagram reddit seo-keywords crypto", text: "Read public social, SEO and market data. Nothing to connect." },
+    { title: "All integrations", href: "/integrations/overview", apps: "openai notion figma firecrawl google-analytics", text: "Browse every category." },
+  ]}
+/>
 
 ## Without ClawLink vs. with ClawLink
 
 | Without ClawLink | With ClawLink |
 |---|---|
 | Implement provider auth flows per integration | Start a hosted connect flow from the dashboard |
-| Store credentials locally or in your own vault | Credentials are managed by ClawLink |
+| Store credentials locally or in your own vault | ClawLink manages the credentials |
 | Write retry and rate-limit logic yourself | Retries and rate-limit handling are built in |
-| No visibility into what your agent called | Usage logs show action, integration, status, and latency |
+| No visibility into what your agent called | Logs show action, app, status and latency |
 | Hand-wire every client setup | Install once, pair once, then connect apps as needed |

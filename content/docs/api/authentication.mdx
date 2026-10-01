@@ -10,7 +10,7 @@ prefix `cllk_live_`.
 ## Get an API key
 
 1. Open the [ClawLink dashboard](https://claw-link.dev).
-2. Go to **Settings → API Keys**.
+2. Go to **Settings → Developer**, under **Manual key**.
 3. Create a key and copy it.
 
 <Warning>
@@ -69,8 +69,7 @@ A missing or invalid key returns `401`:
 { "error": "Unauthorized" }
 ```
 
-This is also what you get if the key was revoked. Create a fresh key in **Settings → API
-Keys** and retry.
+This is also what you get if the key was revoked. Create a fresh key in **Settings → Developer** and retry.
 
 <Note>
   A key represents a single ClawLink user. All executions, file uploads, and flows run

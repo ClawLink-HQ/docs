@@ -1,5 +1,13 @@
 {
   "title": "Dashboard",
   "icon": "LayoutDashboard",
-  "pages": ["overview", "install", "integrations", "request-logs", "settings"]
+  "pages": [
+    "overview",
+    "install",
+    "integrations",
+    "devices",
+    "request-logs",
+    "playground",
+    "settings"
+  ]
 }

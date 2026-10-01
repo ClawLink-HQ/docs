@@ -1,80 +1,74 @@
 ---
 title: "How It Works"
-description: "How the hosted app, execution worker, shared storage, and request flow fit together"
+description: "What happens between your agent, ClawLink and the app on every tool call"
 icon: "Workflow"
 ---
 
-ClawLink runs as a single hosted web app that also performs tool execution in the same worker. The browser-facing flows and the tool execution flows share the same data and credential storage, so pairing, connections, and execution stay in sync.
+ClawLink is one hosted app on `claw-link.dev`. The same app serves the dashboard, the pairing pages and the connect flows, and it runs every tool call. Pairing, connections and execution use the same data, so they always agree.
 
-- `clawlink-web` on `claw-link.dev` handles the hosted app, dashboard, pairing pages, connect popups and OAuth callbacks, billing routes, **and tool execution** — the runtime that resolves a connection, decrypts the credential, and calls each provider.
-- `clawlink-trial-cron` is a small scheduled worker that runs once a day to send trial-expired emails. It calls back into `clawlink-web` over a service binding; it does not execute tools itself.
+## One tool call, end to end
 
-Both workers share the same D1 database (`clawlink`) and the same `CREDENTIALS` KV namespace.
+<Flow
+  steps={[
+    { icon: "bot", title: "Your agent", text: "Calls a ClawLink tool with its device credential." },
+    { icon: "user-check", title: "Check", text: "ClawLink finds your account, your plan and the right connection." },
+    { icon: "key-round", title: "Sign", text: "It adds the app's credential to the request. Your agent never sees it." },
+    { icon: "send", title: "Call", text: "The app's API runs the action. ClawLink retries short failures." },
+    { icon: "scroll-text", title: "Log", text: "The result goes back to your agent and into Logs." },
+  ]}
+/>
 
-## Runtime architecture
-
-```
-OpenClaw / Hermes
-   │
-   │  plugin install + browser pairing
-   ▼
-claw-link.dev  (clawlink-web)
-   ├── hosted dashboard
-   ├── pairing pages
-   ├── connect popups and callbacks
-   ├── billing routes
-   └── tool execution runtime
-   │
-   ├── shared D1: clawlink
-   └── shared KV: CREDENTIALS
-   │
-   ▼
-Third-party APIs
-
-clawlink-trial-cron — daily scheduled email worker (calls back into clawlink-web)
-```
+## Step by step
 
 <Steps>
   <Step title="Pairing and connect flows start on claw-link.dev">
-    You sign in to the hosted app, approve browser pairing, and connect apps from the dashboard. Hosted OAuth and provider callbacks also land here.
+    You sign in, approve browser pairing, and connect apps from the dashboard. The provider's sign-in pages send you back here when you finish.
   </Step>
 
-  <Step title="Connection sessions create or update exact connection rows">
-    Every hosted connect flow is tied to a connection session. When setup finishes, ClawLink creates or updates the correct `user_integrations` row, including the stable connection id, labels, provider metadata, and default-connection state.
+  <Step title="Each connect flow creates or updates one exact connection">
+    Every connect flow is tied to one connection. When it finishes, ClawLink saves that connection with its own stable id, its label, and whether it is the default for that app. You can connect more than one account of the same app.
   </Step>
 
-  <Step title="The client authenticates with its local ClawLink credential">
-    Browser pairing stores a local ClawLink credential for the OpenClaw or Hermes client. The client uses that credential when it asks ClawLink to list tools, preview actions, or execute a tool call.
+  <Step title="Your agent authenticates with its ClawLink device credential">
+    Pairing stores one ClawLink credential on your agent's machine. The agent sends it when it lists tools, previews an action or runs one.
   </Step>
 
-  <Step title="The execution runtime resolves the right connection">
-    The backend worker looks up the user, finds the target integration, and resolves the right connection row. If multiple connections exist for the same provider, ClawLink uses the default connection unless the request names a specific one.
+  <Step title="ClawLink picks the right connection">
+    ClawLink finds the app and the connection for the request. If you have more than one account for the same app, it uses the default one, unless the request names a specific connection.
   </Step>
 
-  <Step title="Credentials are decrypted only when the provider call runs">
-    ClawLink decrypts the stored provider credential only for the live request, makes the provider API call, records the execution result, and returns the response to OpenClaw.
+  <Step title="The app's credential is used only for the live call">
+    ClawLink makes the provider API call with the stored credential, records the result, and returns the response to your agent.
   </Step>
 </Steps>
 
 ## Security
 
-Your credentials are protected at every stage:
-
-- **Encrypted at rest with AES-256-GCM** — provider credentials are encrypted before storage.
-- **Decrypted only at execution time** — credentials are decrypted only for the live provider request.
-- **The client stores only the ClawLink device credential locally** — provider OAuth tokens and app credentials stay in ClawLink's shared infrastructure.
-- **Delete is row-level for connections** — connection lifecycle is tied to stable connection ids, not a one-row-per-provider assumption.
+<CardGroup cols={2}>
+  <Card title="Tokens stay with ClawLink" icon="shield-check">
+    For most apps, OAuth tokens are held by Composio, our credential partner. ClawLink keeps only a reference.
+  </Card>
+  <Card title="Keys are encrypted" icon="lock">
+    An API key you enter is encrypted with AES-256-GCM and decrypted only for the live request.
+  </Card>
+  <Card title="Your machine holds one credential" icon="laptop">
+    Your agent stores only its ClawLink device credential. No provider token reaches it.
+  </Card>
+  <Card title="Delete one connection at a time" icon="trash-2">
+    Removing a connection removes only that account, not every account of the app.
+  </Card>
+</CardGroup>
 
 <Warning>
-  Treat the locally stored ClawLink device credential like a password. If you believe it has been exposed, revoke it in **Settings > API Keys** and run browser pairing again.
+  Treat the ClawLink device credential on your machine like a password. If you think someone has it, revoke it in **Settings > Developer** or **Devices**, and pair again.
 </Warning>
+
+See [Security](/security) for the full picture.
 
 ## Built-in reliability
 
-ClawLink handles the reliability concerns that would otherwise fall on you:
+- **Retries with backoff.** When an app returns a short-lived error, ClawLink tries again, and waits longer between each try.
+- **Rate limits.** When an app limits requests, ClawLink paces the calls and tells your agent when to try again.
+- **Connection-aware routing.** With more than one account for an app, ClawLink uses your default connection instead of guessing.
 
-- **Retries with exponential backoff** — if a third-party API returns a transient error, ClawLink retries the request automatically, waiting longer between each attempt to avoid overwhelming the service.
-- **Rate limit handling** — when an API enforces rate limits, ClawLink manages the pacing so your agent's requests go through without you having to think about it.
-- **Connection-aware routing** — if one provider has multiple connected accounts, ClawLink can route through the default connection instead of guessing from a single old row.
-
-Every request, successful or not, is recorded in **Usage** with the integration name, action, status, and latency so you can see what the agent actually did.
+Every call, successful or not, shows in **Dashboard > Logs** with the app, the action, the status and the latency, so you can see what your agent actually did.

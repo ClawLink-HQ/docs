@@ -1,8 +1,10 @@
 ---
 title: "Public data apps"
-description: "Read-only TikTok, Instagram, X, YouTube, LinkedIn, Spotify and other public data for your agent. Nothing to connect, paid per call from your credit."
+description: "Read-only TikTok, Instagram, X, YouTube, LinkedIn, Reddit and other public data, plus SEO, AI search, crypto and stock data for your agent. Nothing to connect, paid per call from your credit."
 icon: "Radar"
 ---
+
+import { DataAppGrid, DataAppIcon } from '@/components/data-apps';
 
 Paste this into your agent to try one:
 
@@ -11,11 +13,32 @@ Using tiktok-data, get the profile of @nasa and their 10 latest videos.
 Which one has the best like-to-view ratio?
 ```
 
-Public data apps are the group marked **Included with ClawLink** on your Connections page. Each one is named "\<platform> public data" and is a different thing from the connectable app of the same platform: **Instagram public data** reads public Instagram, **Instagram** posts to your own account. They read what anyone can see on a platform without logging in: profiles, posts, comments, search results, trends. There is nothing to connect. Every account has them from the first minute, and every call is paid from your credit balance instead of your plan.
+Public data apps are the group marked **Included with ClawLink** on your Connections page. They read what anyone can see on the web without logging in: profiles, posts, comments, search results, trends, search rankings and market prices. There is nothing to connect. Every account has them from the first minute, and every call is paid from your credit balance instead of your plan.
 
-## How they work
+Each social app is named "\<platform> public data" and is a different thing from the connectable app of the same platform: **Instagram public data** reads public Instagram, **Instagram** posts to your own account.
 
-A normal ClawLink integration signs in to **your** account on the provider and acts as you. A public data app does not touch your account at all. ClawLink fetches the public page or endpoint through its own data providers, the same way a logged-out visitor would, and returns the structured result to your agent.
+<DataAppGrid />
+
+## Where the data comes from
+
+A normal ClawLink integration signs in to **your** account on the provider and acts as you. A public data app does not touch your account at all. ClawLink buys each call from specialist data providers. They collect the data from the public web, by scraping the public page the way a logged-out visitor sees it, or from public data APIs. ClawLink picks the provider for each action, cleans up the result and returns it to your agent as structured data.
+
+<Flow
+  steps={[
+    { icon: "bot", title: "Your agent", text: "Asks for a profile, a post, a search or a price." },
+    { icon: "wallet", title: "ClawLink", text: "Checks your credit, takes the price, picks the provider." },
+    { icon: "waypoints", title: "Data provider", text: "Fetches the public page or API, like a logged-out visitor." },
+    { icon: "globe", title: "Public web", text: "TikTok, Reddit, Google, CoinGecko and more." },
+  ]}
+/>
+
+| Apps | Where the data comes from | How fresh |
+|---|---|---|
+| TikTok, Instagram, X, YouTube, LinkedIn, Reddit, Threads, Facebook, Spotify, Pinterest, Twitch, Kick, Snapchat, Bluesky, Telegram | Scraped from the public page or the platform's public endpoints | Live, fetched when your agent asks |
+| SEO keywords & SERP, SEO domains & backlinks | A search-data provider that runs live Google and Bing searches and keeps a keyword and backlink index | Search results live; volumes and backlinks from the provider's index |
+| AI visibility | The provider asks ChatGPT, Perplexity and Google the prompt and records the answer and its sources | Live, fetched when your agent asks |
+| Crypto market | CoinGecko | Current market data |
+| Stock market | Marketstack | End of day; intraday prices are delayed |
 
 That is why:
 
@@ -27,14 +50,67 @@ That is why:
   Data comes from the public web and platforms change what they show. A field that exists today can be empty tomorrow, and a heavily requested profile can return a temporary error. ClawLink retries transient errors inside one charge; a call that still fails is refunded.
 </Note>
 
-## What a call costs
+## How the math works
 
-Each action has its own price, from **$0.002** for a TikTok or X read to **$0.10** for a LinkedIn post list. The price is written in every action's description, so your agent sees it before calling. Two rules:
+Every action has a fixed price per call. The cost of a task is the price of each call your agent makes, added up:
+
+```text
+cost = price per call × number of calls
+```
+
+Only the calls to ClawLink cost credit. What your agent does with the result (summarize it, compare it, write a report) runs on your agent's own model and costs nothing here.
+
+### Worked examples
+
+| Task | Calls | Cost |
+|---|---|---|
+| A TikTok profile and its 10 latest videos | `user_profile` + `user_posts` = 2 × $0.002 | **$0.004** |
+| Compare @nike and @adidas on Instagram | 2 profiles + 2 post lists = 4 × $0.004 | **$0.016** |
+| Summarize one YouTube video | `video_captions` = 1 × $0.016 | **$0.016** |
+| Hot posts of 5 subreddits | 5 × $0.00376 | **$0.0188** |
+| Bitcoin price every hour for one day | 24 × $0.00058 | **$0.01392** |
+| Search volume for 50 keywords | $0.024 + 50 × $0.00024 | **$0.036** |
+| Google top 100 for one keyword | $0.004 + 9 × $0.003 | **$0.031** |
+
+### What $20 of credit buys
+
+| Action | Price | Calls for $20 |
+|---|---|---|
+| Crypto price, any crypto action | $0.00058 | 34,482 |
+| Stock price, any stock action | $0.001998 | 10,010 |
+| TikTok or X read | $0.002 | 10,000 |
+| Reddit, Threads, Facebook, Spotify and other social reads | $0.00376 | 5,319 |
+| Instagram read | $0.004 | 5,000 |
+| ChatGPT or Google AI Overview answer | $0.008 | 2,500 |
+| YouTube transcript | $0.016 | 1,250 |
+| LinkedIn post list | $0.10 | 200 |
+
+The free **$0.10** welcome credit covers 50 TikTok reads, or 172 crypto price checks.
+
+### Prices that grow with the request
+
+Most actions cost the same every time. Some SEO and AI visibility actions have a base price plus a small amount per item, because the provider charges us per item:
+
+- `keyword_overview` with 50 keywords: $0.024 base + 50 × $0.00024 = **$0.036**.
+- `google_serp` with 100 results: $0.004 for the first 10 + 9 more pages of 10 × $0.003 = **$0.031**.
+- `backlinks` with 100 backlinks: $0.048 base + 100 × $0.000072 = **$0.0552**.
+
+Each of these actions has a maximum (usually 100 items), so one call can never cost more than its cap. The tables below list the base price and the per-item price.
+
+### Charges and refunds
 
 - **An empty result is still charged.** A search that finds nothing costs the same as one that finds ten results, because the provider charges us either way.
 - **A failed call is refunded.** If the provider errors after retries, the charge is reversed.
+- **No subscription minimum.** You pay only for the calls your agent makes.
 
-Credit is separate from your plan: data calls never count against monthly tool calls. New accounts start with **$0.10 of free credit**. Top up in **Dashboard > Billing** with a $20, $50 or $100 pack. You can see every charge and refund in **Dashboard > Logs**.
+### Which balance pays
+
+Credit is separate from your plan: data calls never count against monthly tool calls. A call takes credit in this order:
+
+1. **Plan credit.** Starter includes $1 and Ultra Heavy includes $5 of credit every month. It resets each month and does not roll over.
+2. **Your credit balance.** The $0.10 welcome credit plus any packs you buy. It does not expire.
+
+Top up in **Dashboard > Billing** with a $20, $50 or $100 pack. You can see every charge and refund in **Dashboard > Logs**.
 
 ## How to prompt
 
@@ -49,12 +125,12 @@ Using youtube-data, get the transcript of https://www.youtube.com/watch?v=… an
 ```
 
 ```text
-Using facebook-data, search the Meta Ad Library for active ads mentioning "meal kit" in the US and summarize the offers.
+Using ai-visibility-data, ask ChatGPT "best way to connect OpenClaw to Gmail" and list the sources it cites.
 ```
 
-## Apps and actions
+## Social apps
 
-### TikTok
+### <DataAppIcon app="tiktok-data" /> TikTok [#tiktok]
 
 App id: `tiktok-data`. 9 actions, $0.002 per call.
 
@@ -76,7 +152,7 @@ What is trending on TikTok today? Give me the search terms.
 | `hashtag_detail` | A TikTok hashtag's view count, video count and challengeID. | $0.002 |
 | `trending_searches` | Today's trending search terms on TikTok. | $0.002 |
 
-### Instagram
+### <DataAppIcon app="instagram-data" /> Instagram [#instagram]
 
 App id: `instagram-data`. 8 actions, $0.004 per call.
 
@@ -97,7 +173,7 @@ Find 10 Instagram accounts similar to @glossier.
 | `search_users` | Search public Instagram accounts by a keyword in their bio or captions. | $0.004 |
 | `similar_users` | Accounts Instagram suggests as similar to a given account. | $0.004 |
 
-### X
+### <DataAppIcon app="x-data" /> X [#x]
 
 App id: `x-data`. 6 actions, $0.002 per call.
 
@@ -116,9 +192,9 @@ What is trending on X in the UnitedStates right now?
 | `search` | Search public X posts, users or media by keyword. | $0.002 |
 | `trending` | Trending topics on X for a country. | $0.002 |
 
-### YouTube
+### <DataAppIcon app="youtube-data" /> YouTube [#youtube]
 
-App id: `youtube-data`. 7 actions, $0.002 to $0.02 per call.
+App id: `youtube-data`. 7 actions, $0.002 to $0.016 per call.
 
 ```text
 Using youtube-data, get the transcript of this video and summarize it in 5 bullets: https://www.youtube.com/watch?v=…
@@ -134,9 +210,9 @@ Search YouTube for "MCP server tutorial" uploaded this month, sorted by popular.
 | `channel_info` | A YouTube channel's subscriber count, video count, description and links. Give the handle, channel id or URL. | $0.002 |
 | `search_videos` | Search YouTube videos by keyword. | $0.004 |
 | `search_channels` | Search YouTube channels by keyword; returns handles and channel ids for channel_info and channel_videos. | $0.002 |
-| `video_captions` | Captions (transcript) of a YouTube video as text. | $0.02 |
+| `video_captions` | Captions (transcript) of a YouTube video as text. | $0.016 |
 
-### LinkedIn
+### <DataAppIcon app="linkedin-data" /> LinkedIn [#linkedin]
 
 App id: `linkedin-data`. 7 actions, $0.002 to $0.10 per call.
 
@@ -148,96 +224,52 @@ Search LinkedIn jobs for "developer advocate" posted in the past week.
 
 | Action | What you get | Price |
 |---|---|---|
-| `user_profile` | Public LinkedIn profile by URL: what a logged-out visitor sees (headline, location, about, follower count). LinkedIn no longer shows work history publicly. | $0.02 |
+| `user_profile` | Public LinkedIn profile by URL: what a logged-out visitor sees (headline, location, about, follower count). LinkedIn no longer shows work history publicly. | $0.016 |
 | `user_posts` | Recent public posts of a LinkedIn member with reactions and comment counts. | $0.10 |
-| `company_profile` | Public LinkedIn company page: industry, size, headquarters, follower count, description. | $0.02 |
+| `company_profile` | Public LinkedIn company page: industry, size, headquarters, follower count, description. | $0.016 |
 | `company_posts` | Recent public posts of a LinkedIn company page. | $0.10 |
 | `post_detail` | One public LinkedIn post or article by URL: author, text, reactions, comment count. | $0.002 |
 | `post_comments` | Comments on a public LinkedIn post. | $0.10 |
 | `search_jobs` | Search public LinkedIn job listings by keyword. | $0.10 |
 
-### Spotify
+### <DataAppIcon app="reddit-data" /> Reddit [#reddit]
 
-App id: `spotify-data`. 7 actions, $0.0038 per call.
+App id: `reddit-data`. 5 actions, $0.00376 per call.
 
 ```text
-Using spotify-data, how many monthly listeners does this artist have, and what are their top tracks? https://open.spotify.com/artist/…
-List the tracks on this playlist with their play counts: https://open.spotify.com/playlist/…
-Find the latest 10 episodes of this podcast: https://open.spotify.com/show/…
+Using reddit-data, search Reddit for posts about "self-hosted AI agents" and summarize what people recommend.
+What are the hot posts in r/LocalLLaMA right now?
+Read this Reddit thread and its comments, and list the main complaints: https://www.reddit.com/r/…
 ```
 
 | Action | What you get | Price |
 |---|---|---|
-| `artist` | A Spotify artist by id or URL: monthly listeners, followers, top tracks, discography. | $0.0038 |
-| `track` | A Spotify track by URL: play count, popularity, album and artists. | $0.0038 |
-| `album` | A Spotify album by URL with its track list. | $0.0038 |
-| `playlist` | A Spotify playlist by URL: follower count and tracks. | $0.0038 |
-| `search` | Search Spotify for tracks, artists, albums, playlists and podcasts. | $0.0038 |
-| `podcast` | A Spotify podcast (show) by URL. | $0.0038 |
-| `podcast_episodes` | Episodes of a Spotify podcast by URL. | $0.0038 |
+| `search_posts` | Search all of Reddit for posts about a topic, with title, text, score, comment count and subreddit. | $0.00376 |
+| `subreddit_posts` | Current posts in a subreddit (hot, new, top or rising). | $0.00376 |
+| `subreddit_search` | Search inside one subreddit for posts matching a query. | $0.00376 |
+| `subreddit_details` | About a subreddit: description, rules, weekly active users and contributions, creation date. | $0.00376 |
+| `post_comments` | One Reddit post by URL with its full text and its comment tree (author, text, score, replies). | $0.00376 |
 
-### Snapchat
+### <DataAppIcon app="threads-data" /> Threads [#threads]
 
-App id: `snapchat-data`. 3 actions, $0.0038 per call.
+App id: `threads-data`. 5 actions, $0.00376 per call.
 
 ```text
-Using snapchat-data, get the profile of @nba and its subscriber count.
-Pull the comments on this Spotlight video: https://www.snapchat.com/spotlight/…
+Using threads-data, get the profile of @mosseri and their 10 latest posts.
+Search Threads for posts about "claw-link" from the past week.
 ```
 
 | Action | What you get | Price |
 |---|---|---|
-| `profile` | Public Snapchat profile by handle: display name, subscriber count, bio, spotlight highlights. | $0.0038 |
-| `spotlight` | One Snapchat Spotlight video by URL with view and share counts. | $0.0038 |
-| `spotlight_comments` | Comments on a Snapchat Spotlight video. | $0.0038 |
+| `profile` | Public Threads profile by handle: name, bio, follower count, verified, links. | $0.00376 |
+| `user_posts` | Recent posts of a Threads account by handle, with text and like count. | $0.00376 |
+| `post` | One Threads post by URL with its replies and the rest of the thread. | $0.00376 |
+| `search` | Search Threads posts by keyword, optionally within a date range. | $0.00376 |
+| `search_users` | Find Threads accounts by name or username. | $0.00376 |
 
-### Kick
+### <DataAppIcon app="facebook-data" /> Facebook [#facebook]
 
-App id: `kick-data`. 1 action, $0.0038 per call.
-
-```text
-Using kick-data, get the title, streamer and view count of this clip: https://kick.com/…/clips/…
-```
-
-| Action | What you get | Price |
-|---|---|---|
-| `clip` | A Kick clip by URL: title, streamer, category, views, duration. | $0.0038 |
-
-### Twitch
-
-App id: `twitch-data`. 4 actions, $0.0038 per call.
-
-```text
-Using twitch-data, is @shroud live right now, and what is the stream schedule this week?
-List the 10 most viewed highlights of @pokimane.
-```
-
-| Action | What you get | Price |
-|---|---|---|
-| `profile` | Public Twitch channel by handle: followers, description, live status, recent stream info. | $0.0038 |
-| `user_videos` | Past broadcasts, highlights and uploads of a Twitch channel. | $0.0038 |
-| `user_schedule` | A Twitch channel's stream schedule. | $0.0038 |
-| `clip` | A Twitch clip by URL: title, streamer, game, views, duration. | $0.0038 |
-
-### Pinterest
-
-App id: `pinterest-data`. 4 actions, $0.0038 per call.
-
-```text
-Using pinterest-data, search pins for "small balcony garden" and list the top 10 with their save counts.
-Show me the public boards of @marthastewart.
-```
-
-| Action | What you get | Price |
-|---|---|---|
-| `search` | Search public Pinterest pins by keyword. | $0.0038 |
-| `pin` | One Pinterest pin by URL: title, description, image, board, saves. | $0.0038 |
-| `user_boards` | Public boards of a Pinterest user. | $0.0038 |
-| `board` | Pins on a public Pinterest board by URL. | $0.0038 |
-
-### Facebook
-
-App id: `facebook-data`. 9 actions, $0.0038 per call.
+App id: `facebook-data`. 9 actions, $0.00376 per call.
 
 ```text
 Using facebook-data, get the last 10 posts of https://www.facebook.com/nasa and their reaction counts.
@@ -247,19 +279,98 @@ Which ads is Notion running right now, from the Meta Ad Library?
 
 | Action | What you get | Price |
 |---|---|---|
-| `page_profile` | Public Facebook page or profile by URL: name, category, likes, followers, about. | $0.0038 |
-| `page_posts` | Recent public posts of a Facebook page by URL. | $0.0038 |
-| `page_reels` | Recent public reels of a Facebook page by URL. | $0.0038 |
-| `post` | One public Facebook post by URL: text, media, reactions, comment and share counts. | $0.0038 |
-| `post_comments` | Comments on a public Facebook post by URL. | $0.0038 |
-| `group_posts` | Recent posts of a public Facebook group by URL. | $0.0038 |
-| `ad_library_search` | Search the Meta Ad Library for active ads by keyword. | $0.0038 |
-| `ad_library_company_ads` | Ads a company is running, from the Meta Ad Library, by page id or company name. | $0.0038 |
-| `events_search` | Search public Facebook events by keyword. | $0.0038 |
+| `page_profile` | Public Facebook page or profile by URL: name, category, likes, followers, about. | $0.00376 |
+| `page_posts` | Recent public posts of a Facebook page by URL. | $0.00376 |
+| `page_reels` | Recent public reels of a Facebook page by URL. | $0.00376 |
+| `post` | One public Facebook post by URL: text, media, reactions, comment and share counts. | $0.00376 |
+| `post_comments` | Comments on a public Facebook post by URL. | $0.00376 |
+| `group_posts` | Recent posts of a public Facebook group by URL. | $0.00376 |
+| `ad_library_search` | Search the Meta Ad Library for active ads by keyword. | $0.00376 |
+| `ad_library_company_ads` | Ads a company is running, from the Meta Ad Library, by page id or company name. | $0.00376 |
+| `events_search` | Search public Facebook events by keyword. | $0.00376 |
 
-### Bluesky
+### <DataAppIcon app="spotify-data" /> Spotify [#spotify]
 
-App id: `bluesky-data`. 3 actions, $0.0038 per call.
+App id: `spotify-data`. 7 actions, $0.00376 per call.
+
+```text
+Using spotify-data, how many monthly listeners does this artist have, and what are their top tracks? https://open.spotify.com/artist/…
+List the tracks on this playlist with their play counts: https://open.spotify.com/playlist/…
+Find the latest 10 episodes of this podcast: https://open.spotify.com/show/…
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `artist` | A Spotify artist by id or URL: monthly listeners, followers, top tracks, discography. | $0.00376 |
+| `track` | A Spotify track by URL: play count, popularity, album and artists. | $0.00376 |
+| `album` | A Spotify album by URL with its track list. | $0.00376 |
+| `playlist` | A Spotify playlist by URL: follower count and tracks. | $0.00376 |
+| `search` | Search Spotify for tracks, artists, albums, playlists and podcasts. | $0.00376 |
+| `podcast` | A Spotify podcast (show) by URL. | $0.00376 |
+| `podcast_episodes` | Episodes of a Spotify podcast by URL. | $0.00376 |
+
+### <DataAppIcon app="pinterest-data" /> Pinterest [#pinterest]
+
+App id: `pinterest-data`. 4 actions, $0.00376 per call.
+
+```text
+Using pinterest-data, search pins for "small balcony garden" and list the top 10 with their save counts.
+Show me the public boards of @marthastewart.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `search` | Search public Pinterest pins by keyword. | $0.00376 |
+| `pin` | One Pinterest pin by URL: title, description, image, board, saves. | $0.00376 |
+| `user_boards` | Public boards of a Pinterest user. | $0.00376 |
+| `board` | Pins on a public Pinterest board by URL. | $0.00376 |
+
+### <DataAppIcon app="twitch-data" /> Twitch [#twitch]
+
+App id: `twitch-data`. 4 actions, $0.00376 per call.
+
+```text
+Using twitch-data, is @shroud live right now, and what is the stream schedule this week?
+List the 10 most viewed highlights of @pokimane.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `profile` | Public Twitch channel by handle: followers, description, live status, recent stream info. | $0.00376 |
+| `user_videos` | Past broadcasts, highlights and uploads of a Twitch channel. | $0.00376 |
+| `user_schedule` | A Twitch channel's stream schedule. | $0.00376 |
+| `clip` | A Twitch clip by URL: title, streamer, game, views, duration. | $0.00376 |
+
+### <DataAppIcon app="kick-data" /> Kick [#kick]
+
+App id: `kick-data`. 1 action, $0.00376 per call.
+
+```text
+Using kick-data, get the title, streamer and view count of this clip: https://kick.com/…/clips/…
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `clip` | A Kick clip by URL: title, streamer, category, views, duration. | $0.00376 |
+
+### <DataAppIcon app="snapchat-data" /> Snapchat [#snapchat]
+
+App id: `snapchat-data`. 3 actions, $0.00376 per call.
+
+```text
+Using snapchat-data, get the profile of @nba and its subscriber count.
+Pull the comments on this Spotlight video: https://www.snapchat.com/spotlight/…
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `profile` | Public Snapchat profile by handle: display name, subscriber count, bio, spotlight highlights. | $0.00376 |
+| `spotlight` | One Snapchat Spotlight video by URL with view and share counts. | $0.00376 |
+| `spotlight_comments` | Comments on a Snapchat Spotlight video. | $0.00376 |
+
+### <DataAppIcon app="bluesky-data" /> Bluesky [#bluesky]
+
+App id: `bluesky-data`. 3 actions, $0.00376 per call.
 
 ```text
 Using bluesky-data, get the profile of jay.bsky.team and their latest posts.
@@ -267,13 +378,13 @@ Using bluesky-data, get the profile of jay.bsky.team and their latest posts.
 
 | Action | What you get | Price |
 |---|---|---|
-| `profile` | Public Bluesky profile by handle: followers, following, post count, bio. | $0.0038 |
-| `user_posts` | Recent posts of a Bluesky account by handle. | $0.0038 |
-| `post` | One Bluesky post by URL with likes, reposts and replies. | $0.0038 |
+| `profile` | Public Bluesky profile by handle: followers, following, post count, bio. | $0.00376 |
+| `user_posts` | Recent posts of a Bluesky account by handle. | $0.00376 |
+| `post` | One Bluesky post by URL with likes, reposts and replies. | $0.00376 |
 
-### Telegram
+### <DataAppIcon app="telegram-data" /> Telegram [#telegram]
 
-App id: `telegram-data`. 3 actions, $0.0038 per call.
+App id: `telegram-data`. 3 actions, $0.00376 per call.
 
 ```text
 Using telegram-data, get the subscriber count of the @durov channel and summarize its last 10 posts.
@@ -281,12 +392,124 @@ Using telegram-data, get the subscriber count of the @durov channel and summariz
 
 | Action | What you get | Price |
 |---|---|---|
-| `channel` | Public Telegram channel by handle: title, description, subscriber count. | $0.0038 |
-| `channel_posts` | Recent posts of a public Telegram channel. | $0.0038 |
-| `post` | One public Telegram channel post by URL. | $0.0038 |
+| `channel` | Public Telegram channel by handle: title, description, subscriber count. | $0.00376 |
+| `channel_posts` | Recent posts of a public Telegram channel. | $0.00376 |
+| `post` | One public Telegram channel post by URL. | $0.00376 |
+
+## SEO and AI search apps
+
+### <DataAppIcon app="seo-keyword-data" /> SEO keywords & SERP [#seo-keywords]
+
+App id: `seo-keyword-data`. 8 actions, from $0.004 per call.
+
+```text
+Using seo-keyword-data, show me the Google top 10 for "best crm for startups" in the US.
+Get search volume, CPC and difficulty for these keywords: openclaw gmail, openclaw slack, hermes agent notion.
+Give me 30 keyword ideas around "AI agent integrations" with their search volume.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `google_serp` | Live Google results for a keyword: organic rankings with titles, URLs and snippets, plus People Also Ask, videos and other result types, for any country or city. | $0.004 + $0.003 per 10 results after the first 10 |
+| `bing_serp` | Live Bing top 10 results for a keyword: rankings with titles, URLs and snippets. | $0.004 |
+| `google_autocomplete` | Google autocomplete suggestions for a partial query, in the order Google shows them. | $0.004 |
+| `keyword_overview` | Google search volume, CPC, competition, keyword difficulty (0-100) and search intent for a list of keywords. | $0.024 + $0.00024 per keyword |
+| `keyword_ideas` | Keyword ideas in the same topic as one or more seed keywords, with search volume, CPC and difficulty for each. | $0.024 + $0.00024 per idea |
+| `related_keywords` | Keywords from Google's 'searches related to' for a seed keyword, with search volume, CPC and difficulty. | $0.024 + $0.00024 per keyword |
+| `keyword_difficulty` | Keyword difficulty (0-100, how hard it is to rank in Google's top 10) for a list of keywords. | $0.024 + $0.00024 per keyword |
+| `search_intent` | Search intent (informational, navigational, commercial, transactional) with a probability for a list of keywords. | $0.024 + $0.00024 per keyword |
+
+### <DataAppIcon app="seo-domain-data" /> SEO domains & backlinks [#seo-domains]
+
+App id: `seo-domain-data`. 9 actions, from $0.0003 per call.
+
+```text
+Using seo-domain-data, which keywords does claw-link.dev rank for, and who are its top organic competitors?
+Run an on-page audit and a page speed check on https://claw-link.dev/pricing.
+How many referring domains does zapier.com have, and which are the strongest?
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `domain_overview` | A domain's Google organic and paid footprint: ranking keyword count, estimated monthly traffic and how many keywords sit in each position band. | $0.02424 |
+| `ranked_keywords` | Keywords a domain or URL ranks for in Google, with position, ranking URL, search volume and estimated traffic, highest traffic first. | $0.024 + $0.00024 per keyword |
+| `competitors` | Domains that compete with a domain in Google organic search: shared keywords, average position and their estimated traffic. | $0.024 + $0.00024 per competitor |
+| `backlinks_summary` | A domain's backlink profile: total backlinks, referring domains, domain rank (0-1000), spam score and broken links. | $0.048072 |
+| `backlinks` | Backlinks pointing to a domain or page: linking URL, anchor text, dofollow flag, rank and first-seen date. | $0.048 + $0.000072 per backlink |
+| `referring_domains` | Domains that link to a domain or page, with how many backlinks each gives and its rank. | $0.048 + $0.000072 per domain |
+| `page_audit` | On-page SEO audit of one URL: title, meta description, headings, word count, load time, status code, on-page score and the failed checks (missing H1, no alt text, slow page and more). | $0.0003 |
+| `page_content` | Reads one web page and returns its main text as clean markdown, without menus and footers. | $0.0003 |
+| `page_speed` | Google Lighthouse scores (0-1) for performance, accessibility, best practices and SEO of one URL, with Core Web Vitals. | $0.01 |
+
+### <DataAppIcon app="ai-visibility-data" /> AI visibility [#ai-visibility]
+
+App id: `ai-visibility-data`. 6 actions, from $0.008 per call.
+
+```text
+Using ai-visibility-data, ask ChatGPT "best way to connect OpenClaw to Gmail" and list the sources it cites.
+Does Google's AI Overview for "mcp server for slack" cite claw-link.dev?
+Compare what Perplexity and Google AI Mode answer to "best AI agent for small business".
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `chatgpt_answer` | What ChatGPT (with web search) answers to a prompt, as a real user sees it, with the sources it cited and the searches it ran. Use it to check whether a brand or page is mentioned. | $0.008 |
+| `perplexity_answer` | What Perplexity (sonar, with web search) answers to a prompt, with the URLs it cites and the searches it ran. | $0.014 |
+| `google_ai_overview` | Google's AI Overview for a keyword, with the pages it cites, next to the top 10 organic results. The overview is empty when Google shows none for that query. | $0.008 |
+| `google_ai_mode` | Google AI Mode's answer to a query, with the pages it cites. | $0.008 |
+| `ai_search_volume` | Estimated monthly volume of a keyword in AI assistants (ChatGPT, Gemini, AI Overviews), with the 12-month trend. A modeled estimate: 0 does not prove nobody asks. | $0.02 + $0.0002 per keyword |
+| `llm_mentions` | AI answers (Google AI Overviews or ChatGPT) that mention a domain or keyword, with the question, the answer and its sources. The most expensive AI tool: use it for a brand or category with real volume. | $0.20 + $0.002 per answer |
+
+## Market data apps
+
+### <DataAppIcon app="crypto-market-data" /> Crypto market [#crypto]
+
+App id: `crypto-market-data`. 11 actions, $0.00058 per call. Data from CoinGecko.
+
+```text
+Using crypto-market-data, what are BTC and ETH trading at in EUR, and how did they move over the last 30 days?
+List the 10 trending coins today with their 24h change.
+What was the price of Solana on 2025-01-01?
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `price` | Current price of one or more coins in any currency, with optional market cap, 24h volume and 24h change. | $0.00058 |
+| `top_coins` | Coins ranked by market cap (or volume), each with price, market cap, volume, 24h high/low and change, supply and all-time high. Also the way to get full market data for specific coins (pass ids). | $0.00058 |
+| `coin_profile` | What one coin is: description, website and social links, categories, genesis date, hashing algorithm and market-cap rank. For its price and market data use top_coins with ids. | $0.00058 |
+| `ohlc` | Open, high, low, close candles for a coin: 30-minute candles for 1 day, 4-hour up to 30 days, 4-day beyond. Each row is [time in ms, open, high, low, close]. | $0.00058 |
+| `price_history` | Price, market cap and volume series for a coin over the last N days. Points are 5-minute for 1 day, hourly up to 90 days, daily beyond; each is [time in ms, value]. | $0.00058 |
+| `price_on_date` | A coin's price, market cap and volume on one past date (00:00 UTC), in every currency. | $0.00058 |
+| `global_market` | The whole crypto market: total market cap and 24h volume in every currency, market-cap share of the top coins (BTC dominance), 24h change and the number of coins and markets. | $0.00058 |
+| `trending` | The coins, NFT collections and categories most searched on CoinGecko in the last 24 hours, with price, market cap and 24h change. | $0.00058 |
+| `search` | Find the CoinGecko id of a coin, exchange, category or NFT by name or ticker (solana, SOL). Every other crypto tool takes these ids, not tickers. | $0.00058 |
+| `exchanges` | Crypto exchanges ranked by trust score, with 24h volume in BTC, country, year established and website. | $0.00058 |
+| `supported_currencies` | Every quote currency the price tools accept (usd, eur, btc, eth …). | $0.00058 |
+
+### <DataAppIcon app="stock-market-data" /> Stock market [#stocks]
+
+App id: `stock-market-data`. 7 actions, $0.001998 per call. Data from Marketstack. Prices are end of day, not live quotes.
+
+```text
+Using stock-market-data, get the daily closes of AAPL and MSFT for the last 3 months and compare their performance.
+When did NVDA last split, and by what factor?
+List the dividends Coca-Cola paid in the last 2 years.
+```
+
+| Action | What you get | Price |
+|---|---|---|
+| `price` | The most recent end-of-day bar (open, high, low, close, volume) for one or more stocks: yesterday's close during market hours. Not a live quote. | $0.001998 |
+| `price_history` | Daily open, high, low, close and volume for one or more stocks over a date range, with split- and dividend-adjusted close. Stocks on 70+ exchanges, 30+ years back. | $0.001998 |
+| `intraday_prices` | Intraday bars for a US stock from the IEX exchange (delayed, not real time): open, high, low, close, volume per interval. | $0.001998 |
+| `search_tickers` | Find a stock's ticker by company name or symbol, with the exchange it trades on. Every other stock tool takes these tickers. | $0.001998 |
+| `dividends` | Dividend payments of a stock: date and amount per share. | $0.001998 |
+| `splits` | Stock splits of a stock: date and split factor. | $0.001998 |
+| `exchanges` | Stock exchanges covered, with MIC code, country, city, timezone and currency. | $0.001998 |
+
 ## Limits and good practice
 
 - **Public only.** These apps never see private content, and they never act on a platform. Use them for research, monitoring and reporting.
 - **Respect the platforms.** The data belongs to the people who posted it. Do not use these actions to build datasets of personal information, and follow each platform's terms for anything you publish from what you read.
 - **Loops cost money.** An agent that polls a profile every minute spends credit every minute. Ask for what you need once, and keep an eye on the balance in the sidebar.
-- **Prices in this page are current at the time of writing.** The action description your agent reads is the authoritative price.
+- **Not financial advice.** Market data is for research. Stock prices are end of day and intraday prices are delayed, so do not trade on them as live quotes.
+- **Prices on this page are current at the time of writing.** Your agent sees each action's price in its description, and **Dashboard > Logs** shows the exact charge of every call.

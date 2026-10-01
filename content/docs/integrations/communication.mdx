@@ -4,44 +4,24 @@ description: "Email, chat, and messaging integrations for agent workflows"
 icon: "MessageSquare"
 ---
 
-Connect your messaging and email services so your agent can send, read, and manage communications on your behalf.
+Connect your email and chat apps, so your agent can send, read and organize messages for you.
 
-## Common apps in this category
+## Apps in this category
 
-- Gmail
-- Slack
-- Outlook
-- Discord
-- Telegram
-- Microsoft Teams
-- Twilio
-- Google Chat
+<AppGrid apps="gmail slack outlook microsoft-teams discord telegram whatsapp zoom sendgrid resend" />
 
-## Typical tasks
+## Try asking
 
-- Drafting and sending emails
-- Searching inboxes and summarizing threads
-- Posting Slack or Discord updates
-- Sending Telegram notifications
-- Pulling chat context into another workflow
-
-## Learn more about these apps
-
-<CardGroup cols={2}>
-  <Card title="Connect Gmail" icon="envelope" href="https://claw-link.dev/hub/gmail">
-    Send, read, and manage email from your agent.
-  </Card>
-  <Card title="Connect Slack" icon="message" href="https://claw-link.dev/hub/slack">
-    Post updates and work with Slack channels.
-  </Card>
-  <Card title="Connect Discord" icon="message" href="https://claw-link.dev/hub/discord">
-    Use Discord-connected workflows from your agent.
-  </Card>
-  <Card title="Connect Telegram" icon="message" href="https://claw-link.dev/hub/telegram">
-    Send Telegram messages and notifications.
-  </Card>
-</CardGroup>
+<Prompts
+  items={[
+    ["gmail", "Summarize my unread emails from today and draft replies to the urgent ones"],
+    ["slack", "Post the release notes in #announcements"],
+    ["outlook", "Find the last email from the finance team and list the attachments"],
+    ["microsoft-teams", "Send a message to the design channel that the review moved to 3 pm"],
+    ["telegram", "Send me a Telegram message when the report is ready"],
+  ]}
+/>
 
 <Note>
-  Connection details vary by provider. Use the dashboard to see whether a given app is ready today, needs reconnect, or is still coming soon.
+  Each app has its own setup. Some need extra steps on the provider side: **Telegram Bot** needs a bot token from @BotFather, and **WhatsApp Business** needs a Meta developer account. The dashboard shows what each app needs.
 </Note>

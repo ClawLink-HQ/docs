@@ -1,37 +1,40 @@
 ---
 title: "Install"
-description: "Use the dashboard install flow for OpenClaw and Hermes"
+description: "Use the dashboard Install page to set up any agent in three steps"
 icon: "Download"
 ---
 
-The **Install** page is the fastest place to start if you want the product to hand you the right setup flow instead of piecing it together from older docs.
+The **Install** page is the fastest way to start. Pick your agent, and the page gives you the exact command or prompt for it, with a copy button. It changes together with the product, so it is always current.
 
-## What the Install page is for
+<LogoRow apps="openclaw hermes claude cursor codex grokbot muse claude-ai chatgpt" labels />
 
-- Getting the current OpenClaw setup instructions
-- Copying the Hermes bootstrap prompt
-- Jumping into pairing without hunting through the rest of the dashboard
+## The three steps
 
-## Which path to use
+<Steps>
+  <Step title="Set up your agent">
+    Pick your agent. The page shows what to run:
 
-<CardGroup cols={2}>
-  <Card title="OpenClaw" icon="terminal" href="/openclaw">
-    Install the plugin, start browser pairing, approve the device, then connect apps.
-  </Card>
-  <Card title="Hermes" icon="sparkles" href="/hermes">
-    Copy the Hermes install prompt from the dashboard, paste it into Hermes, and approve pairing.
-  </Card>
-</CardGroup>
+    - **OpenClaw** and **Hermes**: the plugin install and pairing steps. See [OpenClaw setup](/openclaw) and [Hermes setup](/hermes).
+    - **Claude Code** and **Cursor**: two commands. The first signs you in, the second adds ClawLink to the agent.
+    - **Codex**, **Grok Bot** and any other agent: one command, `npx -y @useclawlink/cli login`, run where the agent runs.
+    - **Muse**: one prompt to paste into Muse. Muse sets up ClawLink and sends you one link to approve.
+    - **ChatGPT** and **Claude.ai**: add ClawLink as a connector, then approve when it asks.
+  </Step>
+  <Step title="Connect an app">
+    Click an app chip to start its hosted connect flow. Your agent can only use the apps you connect.
+  </Step>
+  <Step title="Try it out">
+    Copy a prompt and send it to your agent.
+  </Step>
+</Steps>
 
-## After install
+## Prompts to try
 
-No matter which client you use, the next step is the same:
-
-1. Open **Dashboard > Connections**
-2. Click **Add connection**
-3. Finish the hosted connect flow for the apps you want
-4. Return to your agent and ask it to use those apps
-
-<Tip>
-  Treat the dashboard install page as the canonical handoff for setup. It is closer to the product than one-off support articles, so it is the best place to start when a flow changes.
-</Tip>
+<Prompts
+  items={[
+    ["clawlink", "Using ClawLink, list the apps I have connected."],
+    ["gmail", "Using ClawLink, show my 5 most recent Gmail emails."],
+    ["google-drive", "Using ClawLink, list the files in my Google Drive changed this week."],
+    ["google-calendar", "Using ClawLink, add a Google Calendar event tomorrow at 10:00 called Team sync."],
+  ]}
+/>

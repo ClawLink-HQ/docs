@@ -4,35 +4,23 @@ description: "CRM and sales integrations for leads, accounts, deals, and custome
 icon: "Users"
 ---
 
-Connect your CRM and sales tools so your agent can manage leads, update deals, and keep your pipeline moving.
+Connect your CRM, sales and support tools, so your agent can research leads, update deals and keep customer records current.
 
-## Common apps in this category
+## Apps in this category
 
-- Apollo
-- HubSpot
-- Salesforce
-- Pipedrive
-- Dynamics 365
+<AppGrid apps="hubspot salesforce apollo attio zendesk intercom" />
 
-## Typical tasks
+## Try asking
 
-- Researching leads
-- Creating or updating contacts
-- Moving deals through pipelines
-- Syncing notes from email or calls
-- Preparing account context for outbound work
-
-## Learn more about these apps
-
-<CardGroup cols={2}>
-  <Card title="Connect HubSpot" icon="chart-line" href="https://claw-link.dev/hub/hubspot">
-    Manage contacts, companies, and deals.
-  </Card>
-  <Card title="Connect Salesforce" icon="users" href="https://claw-link.dev/hub/salesforce">
-    Update CRM records and account data.
-  </Card>
-</CardGroup>
+<Prompts
+  items={[
+    ["hubspot", "Show my most recent contacts and the deals linked to them"],
+    ["salesforce", "Update the Acme opportunity to Negotiation and add a note from today's call"],
+    ["apollo", "Find 10 heads of marketing at fintech companies in London"],
+    ["zendesk", "List the open tickets older than 3 days"],
+  ]}
+/>
 
 <Note>
-  CRM integrations are sensitive to account permissions and field mappings. If a tool call fails, check **Usage** first and then reconnect the provider if needed.
+  CRM tools depend on account permissions and field mappings. If a call fails, open it in **Logs** first, then reconnect the app if necessary.
 </Note>
