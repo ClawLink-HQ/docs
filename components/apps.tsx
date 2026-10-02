@@ -83,7 +83,7 @@ const APPS: Record<string, App> = {
   instagram: { name: 'Instagram', file: 'instagram.svg', description: 'Publish posts and manage media' },
   facebook: { name: 'Facebook', file: 'facebook.svg', description: 'Read Page posts and engagement' },
   reddit: { name: 'Reddit', file: 'reddit.svg', description: 'Post content and browse discussions' },
-  pinterest: { name: 'Pinterest', file: 'pinterest.svg', description: 'Read Pins, boards, analytics, and trends' },
+  pinterest: { name: 'Pinterest', file: 'pinterest.svg', description: 'Post Pins, manage boards, read analytics' },
   // Data, marketing, storage, design, AI
   'google-analytics': { name: 'Google Analytics', file: 'google-analytics.svg', description: 'Reports for your Analytics properties' },
   firecrawl: { name: 'Firecrawl', file: 'firecrawl.svg', description: 'Scrape, crawl, and search the web' },
